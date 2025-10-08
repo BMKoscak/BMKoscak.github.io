@@ -1,0 +1,309 @@
+/* Import Google Fonts for a custom, sci-fi/military look */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap');
+
+/* Define CSS Variables (Custom Properties) for easy theme changes */
+:root {
+    --primary-red: #ff3333;
+    --dark-red: #d10000;
+    --background-color: #0a0a0a;
+    --text-color: #e0e0e0;
+    --text-muted: #cccccc;
+    --ui-bg: rgba(10, 10, 10, 0.7);
+    --border-color: rgba(255, 51, 51, 0.5);
+}
+
+/* --- Global & Body Styles --- */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    /* Hide the default OS cursor so we can use our custom one */
+    cursor: none;
+}
+
+/* --- Custom Cursor --- */
+#cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--primary-red);
+    border-radius: 50%;
+    /* Clicks should pass through the cursor to elements underneath */
+    pointer-events: none;
+    /* High z-index to keep it on top of all other elements */
+    z-index: 9999;
+    /* Center the div on the actual cursor position */
+    transform: translate(-50%, -50%);
+    /* Smooth transition for size changes (like on click) */
+    transition: transform 0.1s ease;
+}
+
+#cursor::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: var(--primary-red);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* A simple class to add a "click" effect to the cursor */
+#cursor.click-effect {
+    transform: translate(-50%, -50%) scale(0.8);
+}
+
+/* --- Animated Background --- */
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+/* Vertical and horizontal scanlines using gradients */
+.animated-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(0deg, transparent 24%, var(--border-color) 25%, var(--border-color) 26%, transparent 27%, transparent 74%, var(--border-color) 75%, var(--border-color) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, var(--border-color) 25%, var(--border-color) 26%, transparent 27%, transparent 74%, var(--border-color) 75%, var(--border-color) 76%, transparent 77%, transparent);
+    background-size: 60px 60px;
+    opacity: 0.1;
+    animation: pan-grid 20s linear infinite;
+}
+
+/* --- Main Layout & Containers --- */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    backdrop-filter: blur(2px);
+}
+
+.title-container h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 6em;
+    color: var(--primary-red);
+    margin: 0;
+    text-shadow: 0 0 10px var(--primary-red), 0 0 20px var(--primary-red), 0 0 40px var(--dark-red);
+    animation: text-flicker 3s infinite alternate;
+}
+
+.title-container p {
+    font-size: 1.2em;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    margin-top: -10px;
+}
+
+/* --- Content Box --- */
+.content-box {
+    display: flex;
+    width: 70%;
+    max-width: 1000px;
+    height: 420px;
+    background: var(--ui-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-top: 40px;
+    box-shadow: 0 0 30px rgba(255, 51, 51, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* Sidebar Navigation */
+.sidebar {
+    width: 200px;
+    flex-shrink: 0; /* Prevent sidebar from shrinking */
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 15px 0;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-muted);
+    padding: 20px;
+    font-size: 1.1em;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+    display: flex; /* Use flexbox for better alignment of icon and text */
+    align-items: center;
+}
+
+.nav-button i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.nav-button:hover {
+    background: rgba(255, 51, 51, 0.1);
+    color: #fff;
+}
+
+.nav-button:hover i {
+    transform: scale(1.2);
+}
+
+.nav-button.active {
+    color: var(--primary-red);
+    border-left-color: var(--primary-red);
+    background: rgba(255, 51, 51, 0.15);
+}
+
+/* Main Content Area */
+.content {
+    flex-grow: 1;
+    padding: 30px 40px; /* Increased padding */
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.content-section {
+    /* Set position to absolute to allow smooth transitions between sections */
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    right: 40px;
+    bottom: 30px;
+    opacity: 0;
+    /* A more subtle slide-up animation */
+    transform: translateY(15px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    pointer-events: none;
+}
+
+.content-section.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.content-section h2 {
+    color: var(--primary-red);
+    border-bottom: 2px solid var(--primary-red);
+    padding-bottom: 5px;
+    margin-top: 0;
+}
+
+.content-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.content-section li {
+    margin-bottom: 15px;
+    font-size: 1.05em;
+    display: flex;
+    align-items: center;
+}
+
+.content-section li i {
+    color: var(--primary-red);
+    margin-right: 12px;
+}
+
+.connect-links a {
+    display: block;
+    background: transparent;
+    border: 1px solid var(--primary-red);
+    color: var(--primary-red);
+    padding: 12px;
+    margin: 10px 0;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.connect-links a:hover {
+    background-color: var(--primary-red);
+    color: #fff;
+    box-shadow: 0 0 10px var(--primary-red);
+}
+
+/* --- Music Controls --- */
+.music-controls {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+    z-index: 100;
+}
+
+.music-controls button,
+.music-controls i {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+#volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100px;
+    height: 4px;
+    background: #555;
+    outline: none;
+    transition: opacity 0.2s;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--primary-red);
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+
+/* --- Keyframe Animations --- */
+@keyframes text-flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        text-shadow: 0 0 10px var(--primary-red), 0 0 20px var(--primary-red), 0 0 40px var(--dark-red);
+    }
+    20%, 24%, 55% { text-shadow: none; }
+}
+
+@keyframes pan-grid {
+    0% { background-position: 0 0; }
+    100% { background-position: 60px -60px; }
+}

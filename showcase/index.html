@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RED LINE</title>
+
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <div id="cursor"></div>
+
+    <div class="animated-bg"></div>
+
+    <div class="music-controls">
+        <button id="play-pause-btn"><i class="fas fa-pause"></i></button>
+        <i class="fas fa-volume-down"></i>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.3">
+        <i class="fas fa-volume-up"></i>
+    </div>
+
+    <div class="main-container">
+
+        <div class="title-container">
+            <h1>RED LINE</h1>
+            <p>Cayo Perico Anomaly: Where Time Unravels and Primal Fears Hunt.</p>
+        </div>
+
+        <div class="content-box">
+            
+            <nav class="sidebar">
+                <button class="nav-button active" data-target="info"><i class="fas fa-info-circle"></i><span>Info</span></button>
+                <button class="nav-button" data-target="rules"><i class="fas fa-scroll"></i><span>Rules</span></button>
+                <button class="nav-button" data-target="guide"><i class="fas fa-book-open"></i><span>Guide</span></button>
+                <button class="nav-button" data-target="staff"><i class="fas fa-users"></i><span>Staff</span></button>
+                <button class="nav-button" data-target="connect"><i class="fas fa-link"></i><span>Connect</span></button>
+            </nav>
+            
+            <main class="content">
+
+                <section id="info" class="content-section active">
+                    <h2>Mission Briefing: Scavenger Protocol</h2>
+                    <p>Welcome, Operator. You have crossed the Red Line. Cayo Perico is a temporal anomaly—a pocket of prehistoric time violently pushed into our reality. The initial top-secret expedition failed; they were overwhelmed by a world that refuses to be tamed.</p>
+                    <p>Under the <strong>Scavenger Protocol</strong>, you are deployed to this hostile island. Your purpose: retrieve vital data, secure lost assets, and survive against threats both ancient and modern. This is a fast-paced, objective-based PvPvE survival shooter.</p>
+                </section>
+
+                <section id="rules" class="content-section">
+                    <h2>Field Regulations</h2>
+                    <ul>
+                        <li><i class="fas fa-ban"></i> <strong>Zero Tolerance:</strong> Cheating, exploiting, or hacking results in a permanent ban. No exceptions.</li>
+                        <li><i class="fas fa-users-slash"></i> <strong>Conduct:</strong> Toxicity, racism, and harassment will not be tolerated. This is an intense, competitive environment, but respect is mandatory.</li>
+                        <li><i class="fas fa-crosshairs"></i> <strong>Fair Play:</strong> Stream sniping and using third-party comms to gain an unfair advantage over players not in your squad is forbidden.</li>
+                        <li><i class="fas fa-sign-out-alt"></i> <strong>Combat Integrity:</strong> Disconnecting during an active firefight ("combat logging") to save your gear is a punishable offense.</li>
+                        <li><i class="fas fa-bullseye"></i> <strong>Objective Focus:</strong> Random Deathmatch (RDM) is not the goal. Engage enemies to secure objectives, defend your position, or survive an encounter.</li>
+                    </ul>
+                </section>
+
+                <section id="guide" class="content-section">
+                    <h2>Survival Guide: Cayo Perico</h2>
+                    <p><strong>Factions:</strong> Choose your allegiance. The disciplined <strong>Military</strong> faction seeks to contain the anomaly, while the resourceful <strong>Survivalists</strong> focus on independent extraction and profit.</p>
+                    <p><strong>The Threats:</strong></p>
+                    <ul>
+                        <li><i class="fa fa-users"></i> <strong>Other Players (PvP):</strong> Every other squad on the island is a potential rival competing for the same objectives.</li>
+                        <li><i class="fa fa-robot"></i> <strong>Rival Factions (PvE):</strong> Hostile AI representing rogue military and other scavenger teams patrol the island.</li>
+                        <li><i class="fa fa-pastafarianism"></i> <strong>Prehistoric Life (PvE):</strong> Dinosaurs are a constant threat. Raptors hunt in packs and large carnivores are territorial. Use them to your advantage or become their prey.</li>
+                    </ul>
+                </section>
+
+                <section id="staff" class="content-section">
+                    <h2>Command Structure</h2>
+                     <ul>
+                        <li>Your Name - Project Lead / Founder</li>
+                        <li>Marusa - Head Administrator</li>
+                        <li>[Admin Name] - Administrator</li>
+                        <li>[Mod Name] - Senior Moderator</li>
+                        <li>[Mod Name] - Moderator</li>
+                    </ul>
+                </section>
+
+                <section id="connect" class="content-section">
+                    <h2>Establish Comms</h2>
+                    <div class="connect-links">
+                       <a href="#" target="_blank"><i class="fab fa-discord"></i> Join our Discord</a>
+                       <a href="#" target="_blank"><i class="fas fa-globe"></i> Visit our Website</a>
+                       <a href="#" target="_blank"><i class="fas fa-donate"></i> Support the Project</a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <audio id="bg-music" src="assets/music.mp3" loop></audio>
+    
+    <script src="script.js"></script>
+</body>
+</html>
