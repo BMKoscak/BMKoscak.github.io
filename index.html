@@ -1,342 +1,168 @@
-<!DOCTYPE HTML>
+<!doctype html>
 <html lang="en">
-	<head>
-		<title>The Benn | Developer & Filmmaker</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<meta name="description" content="The Benn - Developer, Filmmaker, and Creative from Slovenia. Building digital experiences and telling stories through code and film." />
-		<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-		<link rel="stylesheet" href="assets/css/pixel-rebrand.css" />
-	</head>
-	<body class="is-preload">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#100d10">
+	<meta name="description" content="The Benn — music in progress, code with a pulse, and a little Halloween magic from Slovenia.">
+	<title>The Benn — music after dark</title>
+	<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/studio.css">
+</head>
+<body>
+	<a class="skip-link" href="#main">Skip to the good stuff</a>
+	<div class="site-noise" aria-hidden="true"></div>
+	<div class="flashlight" id="flashlight" aria-hidden="true"></div>
 
-		<!-- Mobile Menu Toggle -->
-		<div id="headerToggle">
-			<a href="#" class="toggle"></a>
-		</div>
+	<header class="site-header">
+		<a class="brand" href="#home" aria-label="The Benn home">
+			<span class="brand-mark" aria-hidden="true">B<span>.</span></span>
+			<span class="brand-name">THE BENN<small>STUDIO · SLOVENIA</small></span>
+		</a>
+		<nav class="main-nav" aria-label="Main navigation">
+			<a href="#work">Work</a>
+			<a href="#lab">Beat lab <span class="nav-live" aria-label="interactive">●</span></a>
+			<a href="#about">About</a>
+		</nav>
+		<button class="haunt-toggle" id="hauntToggle" type="button" aria-pressed="false" title="Turn up the haunting">
+			<span class="haunt-dot" aria-hidden="true"></span><span>Haunt mode</span>
+		</button>
+	</header>
 
-		<!-- Header -->
-		<div id="header">
-			<div class="top">
-				<!-- Logo -->
-				<div id="logo">
-					<span class="image avatar48 floating"><img src="images/avatar.png" alt="The Benn Avatar" /></span>
-					<h1 id="title">The Benn</h1>
-					<p>Developer & Filmmaker</p>
+	<main id="main">
+		<section class="hero section-wrap" id="home" aria-labelledby="hero-title">
+			<div class="hero-copy reveal">
+				<p class="eyebrow"><span class="live-dot"></span> IN THE STUDIO <span class="eyebrow-sep">/</span> OCTOBER FREQUENCY</p>
+				<h1 id="hero-title">Beats in the dark.<br><span>Code in the light.</span></h1>
+				<p class="hero-intro">I’m <strong>The Benn</strong> — a music maker and programmer building things with rhythm, curiosity, and a suspicious number of open tabs.</p>
+				<div class="hero-actions">
+					<a class="button button-hot" href="#work">Hear what’s brewing <span aria-hidden="true">↘</span></a>
+					<a class="text-link" href="#lab">Make a little noise <span aria-hidden="true">↗</span></a>
 				</div>
-
-				<!-- Nav -->
-				<nav id="nav">
-					<ul>
-						<li><a href="#top" id="top-link" class="active"><span class="icon solid fa-terminal"> Home</span></a></li>
-						<li><a href="#showcase" id="showcase-link"><span class="icon solid fa-code"> Showcase</span></a></li>
-						<li><a href="#upcoming" id="upcoming-link"><span class="icon solid fa-gamepad"> Upcoming</span></a></li>
-						<li><a href="#employment" id="employment-link"><span class="icon solid fa-briefcase"> Employment</span></a></li>
-						<li><a href="#about" id="about-link"><span class="icon solid fa-user"> About Me</span></a></li>
-						<li><a href="#contact" id="contact-link"><span class="icon solid fa-envelope"> Contact</span></a></li>
-					</ul>
-				</nav>
+				<div class="hero-footnote"><span class="scribble" aria-hidden="true">✳</span> Currently chasing the perfect 808.</div>
 			</div>
-
-			<div class="bottom">
-				<!-- Social Icons -->
-				<ul class="icons">
-					<li><a href="https://www.instagram.com/bmkoscak/" class="icon brands fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
-					<li><a href="https://www.facebook.com/BeniKoscak" class="icon brands fa-facebook-f" target="_blank"><span class="label">Facebook</span></a></li>
-					<li><a href="https://github.com/BMKoscak" class="icon brands fa-github" target="_blank"><span class="label">Github</span></a></li>
-					<li><a href="mailto:beni.koscak@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-				</ul>
+			<div class="hero-art reveal">
+				<div class="art-topline"><span>SESSION 013</span><span class="rec"><i></i> REC</span></div>
+				<div class="moon-halo"></div>
+				<button class="moon-button" id="moonCharm" type="button" aria-label="Tap the moon" title="Tap the moon. Make a wish.">
+					<svg viewBox="0 0 220 220" role="presentation" focusable="false"><defs><radialGradient id="moonGlow"><stop stop-color="#fff4d6"/><stop offset=".72" stop-color="#ffc65b"/><stop offset="1" stop-color="#f5843c"/></radialGradient></defs><circle cx="110" cy="110" r="73" fill="url(#moonGlow)"/><path d="M67 76c10-8 14 7 7 13-8 7-14-5-7-13Zm70 43c10-8 16 4 9 11-9 9-16-4-9-11Zm-49 37c8-7 13 2 8 8-6 8-14 0-8-8Z" fill="#b85936" opacity=".58"/><path d="M91 107c7 6 13 6 20 0m13-2 3 5m-47-5 3 5" fill="none" stroke="#5d2a31" stroke-linecap="round" stroke-width="5"/><path d="M99 130c9 8 19 8 28 0" fill="none" stroke="#5d2a31" stroke-linecap="round" stroke-width="4"/></svg>
+				</button>
+				<span class="orbit orbit-one"></span><span class="orbit orbit-two"></span>
+				<span class="star star-one">✦</span><span class="star star-two">✧</span><span class="star star-three">✦</span>
+				<span class="bat bat-one" aria-hidden="true">🦇</span><span class="bat bat-two" aria-hidden="true">🦇</span>
+				<div class="floating-note note-one">F# minor?</div><div class="floating-note note-two">BOO / BPM</div>
+				<div class="art-footer"><span>THE NIGHT SHIFT</span><span>45° 58′ N · 14° 30′ E</span></div>
 			</div>
-		</div>
+			<div class="hero-scroll" aria-hidden="true"><span></span> SCROLL TO DESCEND</div>
+		</section>
 
-		<!-- Main -->
-		<div id="main">
+		<section class="ticker" aria-label="What I make">
+			<div class="ticker-track" aria-hidden="true"><span>DRILL BEATS</span><b>✳</b><span>CREATIVE CODE</span><b>✳</b><span>ODD LITTLE TOOLS</span><b>✳</b><span>DRILL BEATS</span><b>✳</b><span>CREATIVE CODE</span><b>✳</b><span>ODD LITTLE TOOLS</span><b>✳</b></div>
+		</section>
 
-			<!-- Hero Section -->
-			<section id="top" class="cover">
-				<div class="container">
-					<header class="reveal">
-						<h2 class="glitch" data-text="Hello, World!">Hello, World!</h2>
-						<p>I'm <strong>The Benn</strong> — a developer and filmmaker from Slovenia.<br>
-						I create digital experiences and tell stories through code and film.</p>
-					</header>
-					<footer class="reveal">
-						<a href="#showcase" class="button primary">Explore My Work</a>
-						<a href="https://github.com/BMKoscak" class="button" target="_blank">GitHub</a>
-					</footer>
+		<section class="section-wrap work-section" id="work" aria-labelledby="work-title">
+			<div class="section-heading reveal">
+				<div><p class="eyebrow">01 / THE OPEN PROJECT</p><h2 id="work-title">Fresh from<br>the <em>graveyard shift.</em></h2></div>
+				<p class="heading-aside">Small update, loud intentions.<br>Follow the process as it happens.</p>
+			</div>
+			<article class="project-feature reveal">
+				<div class="project-side">
+					<div class="project-stamp"><span>NOW<br>MAKING</span><span class="stamp-star">✳</span></div>
+					<div class="record-art" aria-hidden="true"><div class="record"><span class="record-label">TB<br>01</span></div><span class="record-glint"></span></div>
+					<div class="project-side-caption"><span>ROUGH CUT 001</span><span>∞ SIDE A</span></div>
 				</div>
-			</section>
+				<div class="project-info">
+					<div class="project-kicker"><span class="status-pill"><i></i> IN PROGRESS</span><span class="project-type">MUSIC / DRILL</span></div>
+					<h3>Drill beat<br><em>after midnight.</em></h3>
+					<p>A new drill beat is taking shape: cold keys, heavy low end, and a rhythm that refuses to sit still. I’m building it one layer at a time and sharing the little wins along the way.</p>
+					<div class="track-meta"><span><b>01</b> CURRENT LOOP</span><span><b>WIP</b> MIX STATUS</span><span><b>YOU</b> ON THE LIST</span></div>
+					<a class="button button-hot" href="https://www.instagram.com/bmkoscak/" target="_blank" rel="noopener noreferrer">Follow the updates <span aria-hidden="true">↗</span></a>
+					<p class="small-note">Instagram opens in a new tab · @bmkoscak</p>
+				</div>
+			</article>
+		</section>
 
-			<!-- Showcase Section -->
-			<section id="showcase" class="reveal">
-				<div class="container">
-					<header>
-						<h2>// Developer Showcase</h2>
-					</header>
-
-					<div class="row">
-						<div class="col-12">
-							<article class="item developer-section">
-								<header>
-									<h3><span class="pixel-cursor"></span> My Passion for Code</h3>
-									
-									<div class="code-love">
-										<code>while(alive) { code(); learn(); create(); }</code>
-									</div>
-									
-									<p>There's something magical about writing code. It's like casting spells — you type abstract symbols and suddenly, something real appears. A button that works. A game that plays. A tool that saves hours of work. That feeling never gets old.</p>
-									
-									<p>I started coding because I wanted to make things. Not just consume content, but create it. Every project is a puzzle waiting to be solved, and I love nothing more than diving deep into a problem until that beautiful moment when everything clicks.</p>
-									
-									<p>Whether it's crafting automation scripts in <strong>Python</strong>, building immersive experiences in <strong>Lua</strong> for game platforms like FiveM, or designing sleek interfaces with <strong>HTML & CSS</strong> — I approach every project with the same excitement I had when I wrote my first "Hello, World!"</p>
-									
-									<p>Code isn't just about syntax. It's about creating worlds that didn't exist before. <span class="pixel-cursor"></span></p>
-									
-									<div class="button-group">
-										<a href="https://github.com/BMKoscak" target="_blank" class="button">View My GitHub</a>
-									</div>
-								</header>
-							</article>
-						</div>
+		<section class="lab-section" id="lab" aria-labelledby="lab-title">
+			<div class="section-wrap lab-wrap">
+				<div class="section-heading reveal">
+					<div><p class="eyebrow">02 / THE LITTLE MACHINE</p><h2 id="lab-title">The <em>Beat Crypt.</em></h2></div>
+					<p class="heading-aside">A tiny drum machine in your browser.<br>Tap a square. Summon a loop.</p>
+				</div>
+				<div class="sequencer reveal" id="sequencer">
+					<div class="seq-header">
+						<div class="seq-title"><span class="seq-icon" aria-hidden="true">◉</span><div><strong>CRYPT-16</strong><small>NO SAMPLES. JUST SPELLS.</small></div></div>
+						<div class="tempo-control"><label for="tempo">TEMPO <output id="tempoValue" for="tempo">140</output> BPM</label><input type="range" id="tempo" min="70" max="180" value="140"></div>
 					</div>
-
-					<!-- Films Subsection -->
-					<header style="margin-top: 4rem;">
-						<h2>// Also a Filmmaker</h2>
-					</header>
-
-					<div class="row">
-						<div class="col-12">
-							<article class="item filmmaker-section">
-								<header>
-									<h3>🎬 Visual Storytelling</h3>
-									
-									<p>Code isn't my only creative outlet. When I'm not behind a keyboard, I'm behind a camera. Filmmaking lets me tell stories in a completely different way — through visuals, sound, and emotion.</p>
-									
-									<p>From short films to experimental pieces, each project is an opportunity to explore new themes and push creative boundaries. The skills transfer both ways: narrative thinking from film helps me design better software, and technical precision from coding helps me plan better shoots.</p>
-									
-									<div class="button-group">
-										<a href="https://www.youtube.com/playlist?list=PLQh1sSYjmQycCJMCov7dyKR6N6LShSnrD" target="_blank" class="button">Watch My Films</a>
-									</div>
-								</header>
-							</article>
-						</div>
+					<div class="step-wrap"><div class="step-numbers" aria-hidden="true"><span></span><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span><span>08</span><span>09</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span></div>
+						<div class="instrument-row" data-instrument="kick"><span class="instrument-name"><b>KCK</b><small>kick</small></span><div class="steps" role="group" aria-label="Kick pattern"></div></div>
+						<div class="instrument-row" data-instrument="snare"><span class="instrument-name"><b>SNR</b><small>snare</small></span><div class="steps" role="group" aria-label="Snare pattern"></div></div>
+						<div class="instrument-row" data-instrument="hat"><span class="instrument-name"><b>HAT</b><small>closed hat</small></span><div class="steps" role="group" aria-label="Closed hi-hat pattern"></div></div>
+						<div class="instrument-row" data-instrument="bass"><span class="instrument-name"><b>808</b><small>sub ghost</small></span><div class="steps" role="group" aria-label="Bass pattern"></div></div>
 					</div>
-				</div>
-			</section>
-
-			<!-- Upcoming Projects -->
-			<section id="upcoming" class="reveal">
-				<div class="container">
-					<header>
-						<h2>// Upcoming Projects</h2>
-					</header>
-
-					<div class="project-card floating">
-						<div class="game-preview">🌲</div>
-						<h3>Project: Indie Video Game</h3>
-						<span class="status-badge">IN DEVELOPMENT</span>
-						<p>A narrative-driven adventure game inspired by Firewatch. Explore atmospheric environments, uncover mysteries, and experience a story that unfolds through exploration and dialogue.</p>
-						<p>Focusing on emotional storytelling, immersive environments, and meaningful player choices. This is more than just a game — it's an experience.</p>
-						<div class="loading-bar"></div>
-						<div class="loading-text">Progress: Loading assets... 65%</div>
+					<div class="seq-controls"><div class="transport"><button class="play-button" id="playPattern" type="button"><span aria-hidden="true">▶</span> PLAY LOOP</button><button class="icon-button" id="randomPattern" type="button" aria-label="Randomize pattern" title="Randomize pattern">⤨</button><button class="icon-button" id="clearPattern" type="button" aria-label="Clear pattern" title="Clear pattern">⌫</button></div><div class="seq-hint" id="seqHint" aria-live="polite">Turn your speakers on. Ghosts hate silence.</div><button class="save-button" id="savePattern" type="button">SAVE PATTERN <span aria-hidden="true">↓</span></button></div>
+						<details class="how-it-works"><summary>How does the little machine work?</summary><p>Tap steps to build a loop. Play it with your browser’s built-in synthesizer, tweak the tempo, then save your pattern on this device.</p></details>
 					</div>
-				</div>
-			</section>
+				<p class="lab-disclaimer reveal">Made with Web Audio in your browser. No audio is sent anywhere.</p>
+			</div>
+		</section>
 
-			<!-- Employment Status -->
-			<section id="employment" class="reveal">
-				<div class="container">
-					<header>
-						<h2>// Current Employment</h2>
-					</header>
+		<section class="section-wrap code-section" id="code" aria-labelledby="code-title">
+			<div class="section-heading reveal">
+				<div><p class="eyebrow">03 / THE OTHER INSTRUMENT</p><h2 id="code-title">I also write<br><em>useful spells.</em></h2></div>
+				<p class="heading-aside">Programming is another way<br>to make an idea feel real.</p>
+			</div>
+			<div class="code-grid">
+				<article class="code-card code-card-main reveal">
+					<div class="card-tag"><span>CREATIVE CODE</span><span>✳ 001</span></div>
+					<div class="code-window" aria-label="A tiny example of code"><div class="window-top"><i></i><i></i><i></i><span>spell.js</span></div><pre><code><span class="code-purple">const</span> <span class="code-green">makeSomething</span> = <span class="code-purple">async</span> () =&gt; {
+  <span class="code-purple">while</span> (<span class="code-orange">curious</span>) {
+    <span class="code-purple">await</span> <span class="code-green">build</span>();
+    <span class="code-purple">await</span> <span class="code-green">makeItWeird</span>();
+  }
+};<span class="code-cursor">▍</span></code></pre></div>
+					<h3>Small tools.<br>Big “what if?” energy.</h3>
+					<p>I like turning curious ideas into useful little things: browser experiments, automations, and interfaces that make complicated stuff feel simple.</p>
+				</article>
+				<article class="code-card code-card-aside reveal">
+					<div class="orbital-badge" aria-hidden="true"><span>&lt;/&gt;</span><i></i></div>
+					<div class="card-tag"><span>MY TOOLBOX</span><span>✳ 002</span></div>
+					<h3>Logic with<br>a pulse.</h3>
+					<p>Web foundations, Python scripts, practical UI, and the occasional experiment where software meets sound.</p>
+					<div class="skill-chips"><span>HTML / CSS</span><span>PYTHON</span><span>JAVASCRIPT</span><span>WEB AUDIO</span></div>
+					<a href="https://github.com/BMKoscak" target="_blank" rel="noopener noreferrer" class="arrow-link">Wander through my GitHub <span aria-hidden="true">↗</span></a>
+				</article>
+			</div>
+		</section>
 
-					<div class="row">
-						<div class="col-6">
-							<article class="job-card">
-								<div class="company-icon">📺</div>
-								<h3>Planet TV</h3>
-								<span class="role">Cameraman</span>
-								<p>Recording TV shows and daily news broadcasts. Behind the camera, bringing stories to living rooms across the nation.</p>
-							</article>
-						</div>
-						<div class="col-6">
-							<article class="job-card">
-								<div class="company-icon">⚽</div>
-								<h3>CUT Production</h3>
-								<span class="role">Cameraman</span>
-								<p>Capturing the excitement of football matches. Every goal, every save, every moment of glory — right through my lens.</p>
-							</article>
-						</div>
-					</div>
-				</div>
-			</section>
+		<section class="about-section" id="about" aria-labelledby="about-title">
+			<div class="section-wrap about-wrap reveal">
+				<div class="about-sigil" aria-hidden="true"><span>TB</span><i>✳</i><b>✦</b></div>
+				<div class="about-copy"><p class="eyebrow">04 / THE HUMAN BEHIND THE HUM</p><h2 id="about-title">A little bit<br><em>maker. A little bit mystery.</em></h2><p>I’m a creative from Slovenia who likes building things from scratch — a beat, a website, a helpful script, whatever the idea asks for. Music gives me a rhythm to think in; programming lets me give those thoughts a shape.</p><p>Most days you’ll find me making, learning, and moving one curious project forward. The rest of the time? Probably looking for the snack I just put down.</p><a class="text-link" href="mailto:beni.koscak@gmail.com">Say hello <span aria-hidden="true">↗</span></a></div>
+			</div>
+		</section>
 
-			<!-- About Me -->
-			<section id="about" class="reveal">
-				<div class="container">
-					<header>
-						<h2>// About Me</h2>
-					</header>
+		<section class="section-wrap contact-section" id="contact" aria-labelledby="contact-title">
+			<div class="contact-panel reveal">
+				<div class="contact-copy"><p class="eyebrow">GOT A GOOD FREQUENCY?</p><h2 id="contact-title">Let’s make<br><em>something strange.</em></h2><p>Got an idea, a question, or a beat to trade notes on?</p><div class="contact-links"><a href="mailto:beni.koscak@gmail.com">Email <span>↗</span></a><a href="https://www.instagram.com/bmkoscak/" target="_blank" rel="noopener noreferrer">Instagram <span>↗</span></a><a href="https://github.com/BMKoscak" target="_blank" rel="noopener noreferrer">GitHub <span>↗</span></a></div></div>
+				<form class="contact-form" action="https://formspree.io/f/xzzjdgzb" method="POST">
+					<label>Your name<input type="text" name="name" autocomplete="name" placeholder="The name they call you" required></label>
+					<label>Your email<input type="email" name="email" autocomplete="email" placeholder="you@example.com" required></label>
+					<label class="message-field">Your message<textarea name="message" placeholder="What are you dreaming up?" rows="3" required></textarea></label>
+					<button class="button button-hot" type="submit">Send a signal <span aria-hidden="true">↗</span></button>
+				</form>
+				<span class="contact-star" aria-hidden="true">✳</span>
+			</div>
+		</section>
+	</main>
 
-					<a href="#" class="image featured"><img src="images/pic08.png" alt="The Benn" /></a>
+	<footer class="site-footer"><a class="footer-brand" href="#home">THE BENN <span>✳</span></a><p>Made with curiosity, code & a tiny bit of ectoplasm.</p><div class="footer-right"><button class="flashlight-toggle" id="flashlightToggle" type="button" aria-pressed="false">✦ <span>FLASHLIGHT</span></button><span>© <span id="year"></span> · SLOVENIA</span></div></footer>
 
-					<div class="about-content">
-						<p>I'm a 19-year-old developer from <strong>Slovenia 🇸🇮</strong> with an obsession for creating digital experiences and telling stories through both code and film. My journey into technology started young, and I've never looked back.</p>
-
-						<p>As a developer, I specialize in <strong>games 🎮</strong> and <strong>automation scripts 📝</strong>. Python is my go-to for data processing and workflow optimization. In the Lua ecosystem, I focus on game development — especially for platforms like FiveM where I create loading screens, UI systems, and gameplay mechanics.</p>
-
-						<p>My web foundation is built on solid <strong>HTML & CSS</strong>, allowing me to craft responsive, visually striking websites. I believe in the intersection of design and functionality — every project should not only work flawlessly but feel intuitive and engaging.</p>
-
-						<p>Beyond coding, <strong>filmmaking 🎬</strong> is my other creative outlet. Visual storytelling through short films and experimental pieces significantly influences how I approach software. Both mediums share a common goal: creating worlds and experiences that didn't exist before.</p>
-
-						<p>What drives me is the opportunity to solve real problems through technology while maintaining a creative edge. Whether developing a game mechanic that surprises players, writing a script that saves hours of work, or crafting a loading screen that turns a wait into an experience — I'm always looking to make technology more human.</p>
-					</div>
-				</div>
-			</section>
-
-			<!-- Contact -->
-			<section id="contact" class="reveal">
-				<div class="container">
-					<header>
-						<h2>// Get In Touch</h2>
-					</header>
-
-					<p>Have a project in mind? Want to collaborate? Just want to say hi?<br>I'm always open to new opportunities and conversations.</p>
-
-					<form action="https://formspree.io/f/xzzjdgzb" method="POST">
-						<div class="row">
-							<div class="col-6"><input type="text" name="name" placeholder="Your Name" required /></div>
-							<div class="col-6"><input type="email" name="email" placeholder="Your Email" required /></div>
-							<div class="col-12">
-								<textarea name="message" placeholder="Your Message..." required></textarea>
-							</div>
-							<div class="col-12">
-								<input type="submit" value="Send Message" />
-							</div>
-						</div>
-					</form>
-				</div>
-			</section>
-
-		</div>
-
-		<!-- Footer -->
-		<div id="footer">
-			<ul class="copyright">
-				<li>&copy; 2025 The Benn</li>
-				<li>All rights reserved</li>
-				<li>Made with <span style="color: #00ff88;">♥</span> and pixels</li>
-			</ul>
-		</div>
-
-		<!-- Scripts -->
-		<script src="assets/js/jquery.min.js"></script>
-		<script src="assets/js/jquery.scrolly.min.js"></script>
-		<script src="assets/js/jquery.scrollex.min.js"></script>
-		<script src="assets/js/browser.min.js"></script>
-		<script src="assets/js/breakpoints.min.js"></script>
-		<script src="assets/js/util.js"></script>
-		<script src="assets/js/main.js"></script>
-		
-		<!-- Custom Animations -->
-		<script>
-			// Remove preload class after page loads
-			window.addEventListener('load', function() {
-				document.body.classList.remove('is-preload');
-				
-				// Trigger reveal animations
-				setTimeout(function() {
-					document.querySelectorAll('.reveal').forEach(function(el) {
-						el.classList.add('active');
-					});
-				}, 100);
-			});
-
-			// Scroll reveal animation
-			const revealOnScroll = function() {
-				const reveals = document.querySelectorAll('.reveal:not(.active)');
-				reveals.forEach(function(el) {
-					const windowHeight = window.innerHeight;
-					const elementTop = el.getBoundingClientRect().top;
-					const revealPoint = 150;
-					
-					if (elementTop < windowHeight - revealPoint) {
-						el.classList.add('active');
-					}
-				});
-			};
-
-			window.addEventListener('scroll', revealOnScroll);
-
-			// Mobile menu toggle
-			document.querySelector('#headerToggle .toggle').addEventListener('click', function(e) {
-				e.preventDefault();
-				document.body.classList.toggle('header-visible');
-			});
-
-			// Close mobile menu when clicking a nav link
-			document.querySelectorAll('#nav a').forEach(function(link) {
-				link.addEventListener('click', function() {
-					document.body.classList.remove('header-visible');
-				});
-			});
-
-			// Active nav highlighting
-			const sections = document.querySelectorAll('section[id]');
-			window.addEventListener('scroll', function() {
-				let current = '';
-				sections.forEach(function(section) {
-					const sectionTop = section.offsetTop;
-					const sectionHeight = section.clientHeight;
-					if (scrollY >= sectionTop - 300) {
-						current = section.getAttribute('id');
-					}
-				});
-
-				document.querySelectorAll('#nav a').forEach(function(link) {
-					link.classList.remove('active');
-					if (link.getAttribute('href') === '#' + current) {
-						link.classList.add('active');
-					}
-				});
-			});
-
-			// Smooth scrolling for anchor links
-			document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-				anchor.addEventListener('click', function(e) {
-					e.preventDefault();
-					const target = document.querySelector(this.getAttribute('href'));
-					if (target) {
-						target.scrollIntoView({
-							behavior: 'smooth',
-							block: 'start'
-						});
-					}
-				});
-			});
-
-			// Typing effect for loading text
-			const loadingText = document.querySelector('.loading-text');
-			if (loadingText) {
-				const messages = [
-					'Progress: Loading assets... 65%',
-					'Progress: Compiling shaders... 68%',
-					'Progress: Building worlds... 71%',
-					'Progress: Crafting stories... 74%',
-					'Progress: Adding magic... 77%'
-				];
-				let msgIndex = 0;
-				
-				setInterval(function() {
-					msgIndex = (msgIndex + 1) % messages.length;
-					loadingText.textContent = messages[msgIndex];
-				}, 3000);
-			}
-		</script>
-
-	</body>
+	<button class="ghost-sticker" id="ghostSticker" type="button" aria-label="A friendly ghost. Click for a surprise." title="A friendly ghost. Click me."><span aria-hidden="true">👻</span></button>
+	<div class="toast" id="toast" role="status" aria-live="polite"></div>
+	<div class="secret-modal" id="secretModal" role="dialog" aria-modal="true" aria-labelledby="secretTitle" hidden><div class="secret-card"><button class="secret-close" id="secretClose" type="button" aria-label="Close secret">×</button><span class="secret-sigil" aria-hidden="true">☾</span><p class="eyebrow">THE MOON ARCHIVE</p><h2 id="secretTitle">Thirteen knocks.<br>One tiny secret.</h2><p>You found the hidden frequency. The ghost says the bass line is hiding under the stairs.</p><button class="button button-hot" id="secretOkay" type="button">I’ll check the stairs</button></div></div>
+	<script src="assets/js/studio.js" defer></script>
+</body>
 </html>
