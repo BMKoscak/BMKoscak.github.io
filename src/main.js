@@ -365,7 +365,7 @@ form.addEventListener('submit', async (e) => {
 		sound.arp(); stage?.burst(0.8);
 	} catch (err) {
 		statusEl.classList.add('err');
-		statusEl.textContent = 'Message not sent. Check your connection, or email beni.koscak@gmail.com directly.';
+		statusEl.textContent = 'Message not sent. Check your connection, or message me on Instagram or X.';
 	} finally { btn.disabled = false; }
 });
 
