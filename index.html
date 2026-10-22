@@ -3,166 +3,292 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="theme-color" content="#100d10">
-	<meta name="description" content="The Benn — music in progress, code with a pulse, and a little Halloween magic from Slovenia.">
-	<title>The Benn — music after dark</title>
+	<title>The Benn — Ben, developer from Slovenia</title>
+	<meta name="description" content="Ben is a developer from Slovenia who used to make films, photos and beats. Now he builds the software that runs between cameras, microphones and screens.">
+	<meta name="theme-color" content="#0b1426">
+	<meta property="og:title" content="The Benn">
+	<meta property="og:description" content="Films, photos and beats first. Code now. A developer from Slovenia.">
+	<meta property="og:image" content="https://thebenn.me/images/og.jpg">
+	<meta property="og:url" content="https://thebenn.me/">
+	<meta name="twitter:card" content="summary_large_image">
 	<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="assets/css/studio.css">
+	<link rel="preload" href="assets/fonts/big-shoulders-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="assets/fonts/instrument-sans-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="stylesheet" href="assets/css/site.css">
+	<script>document.documentElement.classList.add('js');</script>
+	<script type="importmap">
+	{ "imports": {
+		"three": "./assets/vendor/three/build/three.module.min.js",
+		"three/addons/": "./assets/vendor/three/jsm/"
+	} }
+	</script>
 </head>
 <body>
-	<a class="skip-link" href="#main">Skip to the good stuff</a>
-	<div class="site-noise" aria-hidden="true"></div>
-	<div class="flashlight" id="flashlight" aria-hidden="true"></div>
+	<a class="skip-link" href="#main">Skip to content</a>
 
-	<header class="site-header">
-		<a class="brand" href="#home" aria-label="The Benn home">
-			<span class="brand-mark" aria-hidden="true">B<span>.</span></span>
-			<span class="brand-name">THE BENN<small>STUDIO · SLOVENIA</small></span>
-		</a>
-		<nav class="main-nav" aria-label="Main navigation">
-			<a href="#work">Work</a>
-			<a href="#lab">Beat lab <span class="nav-live" aria-label="interactive">●</span></a>
-			<a href="#about">About</a>
+	<canvas id="stage" aria-hidden="true"></canvas>
+	<div class="stage-fallback" aria-hidden="true"></div>
+	<div class="flash" id="flash" aria-hidden="true"></div>
+	<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor-label"></span></div>
+
+	<!-- Intro: film leader. Also where the browser gets permission to play sound. -->
+	<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+		<div class="leader" aria-hidden="true">
+			<div class="leader-sweep"></div>
+			<div class="leader-cross"></div>
+			<span class="leader-num" id="leaderNum">3</span>
+		</div>
+		<div class="gate-copy">
+			<h2 class="gate-title" id="gate-title">This site makes noise.</h2>
+			<p>Every sound here is synthesized live in your browser. Headphones recommended.</p>
+			<div class="gate-actions">
+				<button class="btn btn-solid" id="enterSound" type="button">Enter with sound</button>
+				<button class="btn btn-ghost" id="enterSilent" type="button">Enter silently</button>
+			</div>
+		</div>
+	</div>
+
+	<header class="topbar">
+		<a class="brand" href="#top" data-cursor="link">The Benn</a>
+		<nav class="nav" aria-label="Main">
+			<a href="#story" data-cursor="link">Story</a>
+			<a href="#work" data-cursor="link">Work</a>
+			<a href="#contact" data-cursor="link">Contact</a>
 		</nav>
-		<button class="haunt-toggle" id="hauntToggle" type="button" aria-pressed="false" title="Turn up the haunting">
-			<span class="haunt-dot" aria-hidden="true"></span><span>Haunt mode</span>
+		<button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" data-cursor="link">
+			<span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+			<span class="sound-label">Sound off</span>
 		</button>
 	</header>
 
+	<div class="hud" aria-hidden="true">
+		<span class="tc"><span class="rec-dot"></span><span id="timecode">00:00:00:00</span></span>
+		<span class="stage-name" id="stageName">Standby</span>
+	</div>
+
 	<main id="main">
-		<section class="hero section-wrap" id="home" aria-labelledby="hero-title">
-			<div class="hero-copy reveal">
-				<p class="eyebrow"><span class="live-dot"></span> IN THE STUDIO <span class="eyebrow-sep">/</span> OCTOBER FREQUENCY</p>
-				<h1 id="hero-title">Beats in the dark.<br><span>Code in the light.</span></h1>
-				<p class="hero-intro">I’m <strong>The Benn</strong> — a music maker and programmer building things with rhythm, curiosity, and a suspicious number of open tabs.</p>
-				<div class="hero-actions">
-					<a class="button button-hot" href="#work">Hear what’s brewing <span aria-hidden="true">↘</span></a>
-					<a class="text-link" href="#lab">Make a little noise <span aria-hidden="true">↗</span></a>
+		<!-- HERO -->
+		<section class="hero" id="top" data-shape="0" aria-labelledby="hero-title">
+			<h1 class="hero-title" id="hero-title" aria-label="The Benn">
+				<span class="ht-line" aria-hidden="true"><span class="ht-word">The</span></span>
+				<span class="ht-line" aria-hidden="true"><span class="ht-word">Benn</span></span>
+			</h1>
+			<div class="hero-body">
+				<p class="hero-lede">I’m Ben, a developer from Slovenia. I spent years behind cameras, microphones and mixing desks. Now I write the software that runs between them.</p>
+				<p class="hero-roles">Currently a developer. Previously a <span class="scramble" id="scramble">music producer</span>.</p>
+			</div>
+			<a class="scroll-cue" href="#story" data-cursor="link"><span class="cue-line" aria-hidden="true"></span>Scroll to follow the signal</a>
+		</section>
+
+		<!-- STORY -->
+		<section class="story" id="story" aria-labelledby="story-title">
+			<div class="story-intro">
+				<h2 class="section-title" id="story-title">The signal chain</h2>
+				<p>Every tool I picked up ended up feeding the next one. Here’s how a kid with a camera ended up writing software for live TV.</p>
+			</div>
+
+			<div class="story-grid">
+				<ol class="rail" aria-label="Chapters">
+					<li data-node="1"><a href="#ch-lens" data-cursor="link"><span class="rail-dot"></span>Lens</a></li>
+					<li data-node="2"><a href="#ch-sound" data-cursor="link"><span class="rail-dot"></span>Sound</a></li>
+					<li data-node="3"><a href="#ch-broadcast" data-cursor="link"><span class="rail-dot"></span>Broadcast</a></li>
+					<li data-node="4"><a href="#ch-code" data-cursor="link"><span class="rail-dot"></span>Code</a></li>
+				</ol>
+
+				<div class="chapters">
+					<!-- 1. LENS -->
+					<article class="chapter" id="ch-lens" data-shape="1" data-tone="lens">
+						<p class="ch-num" aria-hidden="true">1</p>
+						<h3 class="ch-title">It started with a camera.</h3>
+						<p>Short films with friends. Photos of whatever the light was doing that day. Filmmaking taught me framing, timing, and that a shot isn’t finished until somebody else watches it.</p>
+						<p>Photography taught me to wait. The good frame usually shows up a second after you’d have given up.</p>
+
+						<figure class="viewfinder" id="viewfinder" tabindex="0" role="button" aria-label="Take a photo" data-cursor="shoot">
+							<img src="images/camcorder.jpg" width="1600" height="962" alt="My camcorder resting on the railing of a wooden bridge, autumn trees behind it." loading="lazy" decoding="async">
+							<div class="vf-overlay" aria-hidden="true">
+								<span class="vf-c tl"></span><span class="vf-c tr"></span><span class="vf-c bl"></span><span class="vf-c br"></span>
+								<span class="vf-top"><span class="vf-rec"><i></i>REC</span><span class="vf-tc" id="vfTc">00:00:00:00</span></span>
+								<span class="vf-bottom"><span>f/2.8</span><span>1/50</span><span>ISO 400</span><span class="vf-shots" id="vfShots">0 shots</span></span>
+								<span class="vf-focus" id="vfFocus"></span>
+							</div>
+							<figcaption>My camcorder on a bridge. Click the frame to take the shot.</figcaption>
+						</figure>
+					</article>
+
+					<!-- 2. SOUND -->
+					<article class="chapter" id="ch-sound" data-shape="2" data-tone="sound">
+						<p class="ch-num" aria-hidden="true">2</p>
+						<h3 class="ch-title">Then the films needed to sound right.</h3>
+						<p>So I opened FL Studio and didn’t close it for years. Drill beats, cold keys, 808s heavy enough to rattle a car door.</p>
+						<p>Production taught me patience. A loop is a hundred tiny decisions you only notice when one of them is wrong.</p>
+
+						<div class="pads" id="pads" role="group" aria-label="Playable synth pads">
+							<div class="pad-row pad-notes">
+								<button type="button" class="pad" data-note="0" data-key="a" data-cursor="play"><kbd>A</kbd></button>
+								<button type="button" class="pad" data-note="1" data-key="s" data-cursor="play"><kbd>S</kbd></button>
+								<button type="button" class="pad" data-note="2" data-key="d" data-cursor="play"><kbd>D</kbd></button>
+								<button type="button" class="pad" data-note="3" data-key="f" data-cursor="play"><kbd>F</kbd></button>
+								<button type="button" class="pad" data-note="4" data-key="g" data-cursor="play"><kbd>G</kbd></button>
+								<button type="button" class="pad" data-note="5" data-key="h" data-cursor="play"><kbd>H</kbd></button>
+								<button type="button" class="pad" data-note="6" data-key="j" data-cursor="play"><kbd>J</kbd></button>
+								<button type="button" class="pad" data-note="7" data-key="k" data-cursor="play"><kbd>K</kbd></button>
+							</div>
+							<div class="pad-row pad-drums">
+								<button type="button" class="pad pad-drum" data-drum="kick" data-key="z" data-cursor="play"><kbd>Z</kbd><span>808</span></button>
+								<button type="button" class="pad pad-drum" data-drum="snare" data-key="x" data-cursor="play"><kbd>X</kbd><span>Snare</span></button>
+								<button type="button" class="pad pad-drum" data-drum="hat" data-key="c" data-cursor="play"><kbd>C</kbd><span>Hat</span></button>
+							</div>
+							<p class="pads-hint" id="padsHint">Play the keys A to K, drums on Z, X and C. The particles listen.</p>
+						</div>
+					</article>
+
+					<!-- 3. BROADCAST -->
+					<article class="chapter" id="ch-broadcast" data-shape="3" data-tone="broadcast">
+						<p class="ch-num" aria-hidden="true">3</p>
+						<h3 class="ch-title">Live TV pulled it all together.</h3>
+						<p>In live production there’s no second take. Cameras, audio and graphics all have to land on the same frame, and when the control room was missing a tool, I started writing it.</p>
+						<p>A teleprompter that listens to the presenter in Slovenian and scrolls by itself. Video playout locked to 25 frames per second over SDI. Hardware faders and control panels wired into software they were never meant to talk to. LED walls driven from Resolume.</p>
+
+						<div class="switcher" id="switcher">
+							<div class="sw-monitors">
+								<div class="sw-mon sw-pvw"><span class="sw-tag">Preview</span><div class="sw-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+								<div class="sw-mon sw-pgm" id="swPgm"><span class="sw-tag">Program</span><span class="tally" id="tally">On air</span><div class="sw-black" id="swBlack"></div></div>
+							</div>
+							<div class="sw-controls">
+								<label class="tbar" data-cursor="drag">
+									<span>T-bar</span>
+									<input type="range" id="tbar" min="0" max="100" value="0" aria-describedby="swHint">
+								</label>
+								<button type="button" class="btn btn-take" id="take" data-cursor="link">Take</button>
+							</div>
+							<p class="sw-hint" id="swHint">Drag the T-bar to fade the wall up, or hit Take to cut.</p>
+						</div>
+					</article>
+
+					<!-- 4. CODE -->
+					<article class="chapter" id="ch-code" data-shape="4" data-tone="code">
+						<p class="ch-num" aria-hidden="true">4</p>
+						<h3 class="ch-title">Now the instrument is code.</h3>
+						<p>I study computer science at FRI in Ljubljana. I build games in Python, browser tools, a chess opponent, and a 3D adventure in the spirit of the N64 era.</p>
+						<p>Same instincts as before: framing, rhythm, timing. They just compile now.</p>
+
+						<div class="terminal" id="terminal">
+							<div class="term-bar"><span class="term-file">signal.js</span><button type="button" class="term-run" id="runCode" data-cursor="link">Run</button></div>
+							<pre><code id="termCode"></code></pre>
+							<p class="term-out" id="termOut" aria-live="polite"></p>
+						</div>
+					</article>
 				</div>
-				<div class="hero-footnote"><span class="scribble" aria-hidden="true">✳</span> Currently chasing the perfect 808.</div>
 			</div>
-			<div class="hero-art reveal">
-				<div class="art-topline"><span>SESSION 013</span><span class="rec"><i></i> REC</span></div>
-				<div class="moon-halo"></div>
-				<button class="moon-button" id="moonCharm" type="button" aria-label="Tap the moon" title="Tap the moon. Make a wish.">
-					<svg viewBox="0 0 220 220" role="presentation" focusable="false"><defs><radialGradient id="moonGlow"><stop stop-color="#fff4d6"/><stop offset=".72" stop-color="#ffc65b"/><stop offset="1" stop-color="#f5843c"/></radialGradient></defs><circle cx="110" cy="110" r="73" fill="url(#moonGlow)"/><path d="M67 76c10-8 14 7 7 13-8 7-14-5-7-13Zm70 43c10-8 16 4 9 11-9 9-16-4-9-11Zm-49 37c8-7 13 2 8 8-6 8-14 0-8-8Z" fill="#b85936" opacity=".58"/><path d="M91 107c7 6 13 6 20 0m13-2 3 5m-47-5 3 5" fill="none" stroke="#5d2a31" stroke-linecap="round" stroke-width="5"/><path d="M99 130c9 8 19 8 28 0" fill="none" stroke="#5d2a31" stroke-linecap="round" stroke-width="4"/></svg>
-				</button>
-				<span class="orbit orbit-one"></span><span class="orbit orbit-two"></span>
-				<span class="star star-one">✦</span><span class="star star-two">✧</span><span class="star star-three">✦</span>
-				<span class="bat bat-one" aria-hidden="true">🦇</span><span class="bat bat-two" aria-hidden="true">🦇</span>
-				<div class="floating-note note-one">F# minor?</div><div class="floating-note note-two">BOO / BPM</div>
-				<div class="art-footer"><span>THE NIGHT SHIFT</span><span>45° 58′ N · 14° 30′ E</span></div>
-			</div>
-			<div class="hero-scroll" aria-hidden="true"><span></span> SCROLL TO DESCEND</div>
 		</section>
 
-		<section class="ticker" aria-label="What I make">
-			<div class="ticker-track" aria-hidden="true"><span>DRILL BEATS</span><b>✳</b><span>CREATIVE CODE</span><b>✳</b><span>ODD LITTLE TOOLS</span><b>✳</b><span>DRILL BEATS</span><b>✳</b><span>CREATIVE CODE</span><b>✳</b><span>ODD LITTLE TOOLS</span><b>✳</b></div>
+		<!-- WORK -->
+		<section class="work" id="work" data-shape="5" aria-labelledby="work-title">
+			<div class="work-head">
+				<h2 class="section-title" id="work-title">Things I’ve built</h2>
+				<p>Some for the control room, some for fun, some to survive exam season.</p>
+			</div>
+			<ul class="edl">
+				<li class="edl-row" data-tone="broadcast">
+					<span class="edl-kind">Broadcast</span>
+					<h3 class="edl-title">Live teleprompter</h3>
+					<p class="edl-desc">Follows the presenter with Slovenian speech-to-text and scrolls on its own, built to survive dropped connections mid-show.</p>
+				</li>
+				<li class="edl-row" data-tone="broadcast">
+					<span class="edl-kind">Broadcast</span>
+					<h3 class="edl-title">SDI playout engine</h3>
+					<p class="edl-desc">Python video output locked to 25 fps PAL through a Blackmagic DeckLink card, tuned until the cadence was smooth.</p>
+				</li>
+				<li class="edl-row" data-tone="broadcast">
+					<span class="edl-kind">Broadcast</span>
+					<h3 class="edl-title">Control surface bridges</h3>
+					<p class="edl-desc">A TriCaster T-bar driving OBS transitions over websockets, and a LiveControl panel speaking MIDI through a custom serial bridge.</p>
+				</li>
+				<li class="edl-row" data-tone="broadcast">
+					<span class="edl-kind">Broadcast</span>
+					<h3 class="edl-title">End credits for TV</h3>
+					<p class="edl-desc">Smooth credit rolls built in HTML and CSS, sent out to air over SDI.</p>
+				</li>
+				<li class="edl-row" data-tone="lens">
+					<span class="edl-kind">Live visuals</span>
+					<h3 class="edl-title">LED wall pipelines</h3>
+					<p class="edl-desc">Multi-output Resolume Arena setups feeding LED processors for stages and studios.</p>
+				</li>
+				<li class="edl-row" data-tone="code">
+					<span class="edl-kind">Game</span>
+					<h3 class="edl-title">N64-style action game</h3>
+					<p class="edl-desc">A 3D adventure that runs in the browser with that late-90s polygon look. In progress.</p>
+				</li>
+				<li class="edl-row" data-tone="code">
+					<span class="edl-kind">Game</span>
+					<h3 class="edl-title">Detective visual novel</h3>
+					<p class="edl-desc">A tropical murder mystery built in pygame, plus a puzzle adventure and a chess game with an AI opponent.</p>
+				</li>
+				<li class="edl-row" data-tone="code">
+					<span class="edl-kind">Tools</span>
+					<h3 class="edl-title">Study trainers</h3>
+					<p class="edl-desc">Interactive browser tools for operating systems and statistics that generate practice problems forever.</p>
+				</li>
+				<li class="edl-row" data-tone="sound">
+					<span class="edl-kind">Music</span>
+					<h3 class="edl-title">Drill beats</h3>
+					<p class="edl-desc">Cold keys and heavy low end, made in FL Studio. Some of it still leaks onto <a href="https://www.instagram.com/bmkoscak/" target="_blank" rel="noopener noreferrer" data-cursor="link">Instagram</a>.</p>
+				</li>
+				<li class="edl-row" data-tone="sound">
+					<span class="edl-kind">Web</span>
+					<h3 class="edl-title">This site</h3>
+					<p class="edl-desc">Tens of thousands of particles and a synthesizer, running in your browser with no audio files at all.</p>
+				</li>
+			</ul>
+			<p class="work-more"><a class="btn btn-ghost" href="https://github.com/BMKoscak" target="_blank" rel="noopener noreferrer" data-cursor="link">See my code on GitHub</a></p>
 		</section>
 
-		<section class="section-wrap work-section" id="work" aria-labelledby="work-title">
-			<div class="section-heading reveal">
-				<div><p class="eyebrow">01 / THE OPEN PROJECT</p><h2 id="work-title">Fresh from<br>the <em>graveyard shift.</em></h2></div>
-				<p class="heading-aside">Small update, loud intentions.<br>Follow the process as it happens.</p>
-			</div>
-			<article class="project-feature reveal">
-				<div class="project-side">
-					<div class="project-stamp"><span>NOW<br>MAKING</span><span class="stamp-star">✳</span></div>
-					<div class="record-art" aria-hidden="true"><div class="record"><span class="record-label">TB<br>01</span></div><span class="record-glint"></span></div>
-					<div class="project-side-caption"><span>ROUGH CUT 001</span><span>∞ SIDE A</span></div>
+		<!-- CREDITS -->
+		<section class="credits" id="credits" aria-label="Credits">
+			<div class="credits-frame">
+				<div class="credits-roll" id="creditsRoll">
+					<p class="cr-head">The Benn</p>
+					<dl>
+						<div><dt>Directed by</dt><dd>Ben</dd></div>
+						<div><dt>Camera</dt><dd>Ben</dd></div>
+						<div><dt>Music</dt><dd>Ben</dd></div>
+						<div><dt>Engineering</dt><dd>Ben</dd></div>
+						<div><dt>Sound design</dt><dd>Your browser’s audio engine</dd></div>
+						<div><dt>Visual effects</dt><dd>Three.js and a lot of particles</dd></div>
+						<div><dt>Frame rate</dt><dd>25 fps, PAL, out of habit</dd></div>
+						<div><dt>Filmed on location in</dt><dd>Slovenia</dd></div>
+						<div><dt>Next collaborator</dt><dd>You?</dd></div>
+					</dl>
 				</div>
-				<div class="project-info">
-					<div class="project-kicker"><span class="status-pill"><i></i> IN PROGRESS</span><span class="project-type">MUSIC / DRILL</span></div>
-					<h3>Drill beat<br><em>after midnight.</em></h3>
-					<p>A new drill beat is taking shape: cold keys, heavy low end, and a rhythm that refuses to sit still. I’m building it one layer at a time and sharing the little wins along the way.</p>
-					<div class="track-meta"><span><b>01</b> CURRENT LOOP</span><span><b>WIP</b> MIX STATUS</span><span><b>YOU</b> ON THE LIST</span></div>
-					<a class="button button-hot" href="https://www.instagram.com/bmkoscak/" target="_blank" rel="noopener noreferrer">Follow the updates <span aria-hidden="true">↗</span></a>
-					<p class="small-note">Instagram opens in a new tab · @bmkoscak</p>
-				</div>
-			</article>
-		</section>
-
-		<section class="lab-section" id="lab" aria-labelledby="lab-title">
-			<div class="section-wrap lab-wrap">
-				<div class="section-heading reveal">
-					<div><p class="eyebrow">02 / THE LITTLE MACHINE</p><h2 id="lab-title">The <em>Beat Crypt.</em></h2></div>
-					<p class="heading-aside">A tiny drum machine in your browser.<br>Tap a square. Summon a loop.</p>
-				</div>
-				<div class="sequencer reveal" id="sequencer">
-					<div class="seq-header">
-						<div class="seq-title"><span class="seq-icon" aria-hidden="true">◉</span><div><strong>CRYPT-16</strong><small>NO SAMPLES. JUST SPELLS.</small></div></div>
-						<div class="tempo-control"><label for="tempo">TEMPO <output id="tempoValue" for="tempo">140</output> BPM</label><input type="range" id="tempo" min="70" max="180" value="140"></div>
-					</div>
-					<div class="step-wrap"><div class="step-numbers" aria-hidden="true"><span></span><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span><span>08</span><span>09</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span></div>
-						<div class="instrument-row" data-instrument="kick"><span class="instrument-name"><b>KCK</b><small>kick</small></span><div class="steps" role="group" aria-label="Kick pattern"></div></div>
-						<div class="instrument-row" data-instrument="snare"><span class="instrument-name"><b>SNR</b><small>snare</small></span><div class="steps" role="group" aria-label="Snare pattern"></div></div>
-						<div class="instrument-row" data-instrument="hat"><span class="instrument-name"><b>HAT</b><small>closed hat</small></span><div class="steps" role="group" aria-label="Closed hi-hat pattern"></div></div>
-						<div class="instrument-row" data-instrument="bass"><span class="instrument-name"><b>808</b><small>sub ghost</small></span><div class="steps" role="group" aria-label="Bass pattern"></div></div>
-					</div>
-					<div class="seq-controls"><div class="transport"><button class="play-button" id="playPattern" type="button"><span aria-hidden="true">▶</span> PLAY LOOP</button><button class="icon-button" id="randomPattern" type="button" aria-label="Randomize pattern" title="Randomize pattern">⤨</button><button class="icon-button" id="clearPattern" type="button" aria-label="Clear pattern" title="Clear pattern">⌫</button></div><div class="seq-hint" id="seqHint" aria-live="polite">Turn your speakers on. Ghosts hate silence.</div><button class="save-button" id="savePattern" type="button">SAVE PATTERN <span aria-hidden="true">↓</span></button></div>
-						<details class="how-it-works"><summary>How does the little machine work?</summary><p>Tap steps to build a loop. Play it with your browser’s built-in synthesizer, tweak the tempo, then save your pattern on this device.</p></details>
-					</div>
-				<p class="lab-disclaimer reveal">Made with Web Audio in your browser. No audio is sent anywhere.</p>
 			</div>
 		</section>
 
-		<section class="section-wrap code-section" id="code" aria-labelledby="code-title">
-			<div class="section-heading reveal">
-				<div><p class="eyebrow">03 / THE OTHER INSTRUMENT</p><h2 id="code-title">I also write<br><em>useful spells.</em></h2></div>
-				<p class="heading-aside">Programming is another way<br>to make an idea feel real.</p>
+		<!-- CONTACT -->
+		<section class="contact" id="contact" aria-labelledby="contact-title">
+			<div class="contact-copy">
+				<h2 class="section-title" id="contact-title">Let’s make something</h2>
+				<p>A tool for your studio, a site that does more than sit there, or just a beat to trade notes on. Send a message and I’ll get back to you.</p>
+				<ul class="contact-links">
+					<li><a href="mailto:beni.koscak@gmail.com" data-cursor="link">beni.koscak@gmail.com</a></li>
+					<li><a href="https://www.instagram.com/bmkoscak/" target="_blank" rel="noopener noreferrer" data-cursor="link">Instagram</a></li>
+					<li><a href="https://github.com/BMKoscak" target="_blank" rel="noopener noreferrer" data-cursor="link">GitHub</a></li>
+				</ul>
 			</div>
-			<div class="code-grid">
-				<article class="code-card code-card-main reveal">
-					<div class="card-tag"><span>CREATIVE CODE</span><span>✳ 001</span></div>
-					<div class="code-window" aria-label="A tiny example of code"><div class="window-top"><i></i><i></i><i></i><span>spell.js</span></div><pre><code><span class="code-purple">const</span> <span class="code-green">makeSomething</span> = <span class="code-purple">async</span> () =&gt; {
-  <span class="code-purple">while</span> (<span class="code-orange">curious</span>) {
-    <span class="code-purple">await</span> <span class="code-green">build</span>();
-    <span class="code-purple">await</span> <span class="code-green">makeItWeird</span>();
-  }
-};<span class="code-cursor">▍</span></code></pre></div>
-					<h3>Small tools.<br>Big “what if?” energy.</h3>
-					<p>I like turning curious ideas into useful little things: browser experiments, automations, and interfaces that make complicated stuff feel simple.</p>
-				</article>
-				<article class="code-card code-card-aside reveal">
-					<div class="orbital-badge" aria-hidden="true"><span>&lt;/&gt;</span><i></i></div>
-					<div class="card-tag"><span>MY TOOLBOX</span><span>✳ 002</span></div>
-					<h3>Logic with<br>a pulse.</h3>
-					<p>Web foundations, Python scripts, practical UI, and the occasional experiment where software meets sound.</p>
-					<div class="skill-chips"><span>HTML / CSS</span><span>PYTHON</span><span>JAVASCRIPT</span><span>WEB AUDIO</span></div>
-					<a href="https://github.com/BMKoscak" target="_blank" rel="noopener noreferrer" class="arrow-link">Wander through my GitHub <span aria-hidden="true">↗</span></a>
-				</article>
-			</div>
-		</section>
-
-		<section class="about-section" id="about" aria-labelledby="about-title">
-			<div class="section-wrap about-wrap reveal">
-				<div class="about-sigil" aria-hidden="true"><span>TB</span><i>✳</i><b>✦</b></div>
-				<div class="about-copy"><p class="eyebrow">04 / THE HUMAN BEHIND THE HUM</p><h2 id="about-title">A little bit<br><em>maker. A little bit mystery.</em></h2><p>I’m a creative from Slovenia who likes building things from scratch — a beat, a website, a helpful script, whatever the idea asks for. Music gives me a rhythm to think in; programming lets me give those thoughts a shape.</p><p>Most days you’ll find me making, learning, and moving one curious project forward. The rest of the time? Probably looking for the snack I just put down.</p><a class="text-link" href="mailto:beni.koscak@gmail.com">Say hello <span aria-hidden="true">↗</span></a></div>
-			</div>
-		</section>
-
-		<section class="section-wrap contact-section" id="contact" aria-labelledby="contact-title">
-			<div class="contact-panel reveal">
-				<div class="contact-copy"><p class="eyebrow">GOT A GOOD FREQUENCY?</p><h2 id="contact-title">Let’s make<br><em>something strange.</em></h2><p>Got an idea, a question, or a beat to trade notes on?</p><div class="contact-links"><a href="mailto:beni.koscak@gmail.com">Email <span>↗</span></a><a href="https://www.instagram.com/bmkoscak/" target="_blank" rel="noopener noreferrer">Instagram <span>↗</span></a><a href="https://github.com/BMKoscak" target="_blank" rel="noopener noreferrer">GitHub <span>↗</span></a></div></div>
-				<form class="contact-form" action="https://formspree.io/f/xzzjdgzb" method="POST">
-					<label>Your name<input type="text" name="name" autocomplete="name" placeholder="The name they call you" required></label>
-					<label>Your email<input type="email" name="email" autocomplete="email" placeholder="you@example.com" required></label>
-					<label class="message-field">Your message<textarea name="message" placeholder="What are you dreaming up?" rows="3" required></textarea></label>
-					<button class="button button-hot" type="submit">Send a signal <span aria-hidden="true">↗</span></button>
-				</form>
-				<span class="contact-star" aria-hidden="true">✳</span>
-			</div>
+			<form class="contact-form" id="contactForm" action="https://formspree.io/f/xzzjdgzb" method="POST">
+				<label>Name<input type="text" name="name" autocomplete="name" required></label>
+				<label>Email<input type="email" name="email" autocomplete="email" required></label>
+				<label>Message<textarea name="message" rows="4" required></textarea></label>
+				<button class="btn btn-solid" type="submit" data-cursor="link">Send message</button>
+				<p class="form-status" id="formStatus" role="status"></p>
+			</form>
 		</section>
 	</main>
 
-	<footer class="site-footer"><a class="footer-brand" href="#home">THE BENN <span>✳</span></a><p>Made with curiosity, code & a tiny bit of ectoplasm.</p><div class="footer-right"><button class="flashlight-toggle" id="flashlightToggle" type="button" aria-pressed="false">✦ <span>FLASHLIGHT</span></button><span>© <span id="year"></span> · SLOVENIA</span></div></footer>
+	<footer class="footer">
+		<p>© <span id="year">2026</span> The Benn. Made in Slovenia.</p>
+		<a href="#top" data-cursor="link">Back to the top</a>
+	</footer>
 
-	<button class="ghost-sticker" id="ghostSticker" type="button" aria-label="A friendly ghost. Click for a surprise." title="A friendly ghost. Click me."><span aria-hidden="true">👻</span></button>
-	<div class="toast" id="toast" role="status" aria-live="polite"></div>
-	<div class="secret-modal" id="secretModal" role="dialog" aria-modal="true" aria-labelledby="secretTitle" hidden><div class="secret-card"><button class="secret-close" id="secretClose" type="button" aria-label="Close secret">×</button><span class="secret-sigil" aria-hidden="true">☾</span><p class="eyebrow">THE MOON ARCHIVE</p><h2 id="secretTitle">Thirteen knocks.<br>One tiny secret.</h2><p>You found the hidden frequency. The ghost says the bass line is hiding under the stairs.</p><button class="button button-hot" id="secretOkay" type="button">I’ll check the stairs</button></div></div>
-	<script src="assets/js/studio.js" defer></script>
+	<script type="module" src="assets/js/main.js"></script>
 </body>
 </html>
