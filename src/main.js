@@ -1,5 +1,7 @@
 import { Sound } from './audio.js';
 
+document.documentElement.classList.add('js');
+
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
