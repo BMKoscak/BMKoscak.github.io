@@ -1,0 +1,40 @@
+# The Benn
+
+> The Benn is a freelance creative web developer in Ljubljana, Slovenia. Fast websites, interactive 3D for the web and custom tools, built by someone who also works live TV.
+
+The Benn (Ben) is a freelance creative web developer based in Ljubljana, Slovenia. He studies computer science at the Faculty of Computer and Information Science (FRI), University of Ljubljana, helps cover live soccer for SNL and NZS broadcasts and helps with the software behind them, and previously made short films, photography and drill beats (released as The Benn on Spotify).
+
+## Services
+
+- Websites that load fast and feel alive: Portfolios, studio sites and landing pages built with Astro. Static HTML that search engines and AI crawlers can read, with motion and sound layered on top only where it helps.
+- Interactive 3D and creative coding: Three.js and WebGL scenes, browser games, audio-reactive visuals and small interactive pieces that make people stay on a page and play.
+- Custom tools, automation and AI: Python and JavaScript tools that save someone an hour a day: dashboards, converters, MCP servers and AI integrations wired into the software a team already uses.
+
+## Case studies
+
+- [Chains of Hera](https://thebenn.me/work/chains-of-hera.md): A six-chapter 3D action-adventure that runs in one HTML file. Textures, models and music are generated in code, rendered at 640×480 like it’s 1999.
+- [MCP Nexus](https://thebenn.me/work/mcp-nexus.md): A Python hub for the Model Context Protocol. Chat with Claude, Gemini, OpenAI or Ollama, plug in tools, approve what leaves your machine, see every message.
+- [Porsche night commercial](https://thebenn.me/work/porsche-night-commercial.md): A rain-soaked 30-second car commercial built in Blender 5.2 with Cycles: five cameras, a teal-orange grade, 2.39:1 letterbox and a synced sound mix.
+- [Island murder mystery](https://thebenn.me/work/island-mystery-visual-novel.md): A detective visual novel set on a Caribbean island, built in Python with pygame. Dialogue, choices and clues, plus a playable example scene.
+- [Chess with an AI opponent](https://thebenn.me/work/chess-ai.md): A playable chess game with a computer opponent that looks ahead and scores positions. Includes an interactive demo of how that look-ahead is pruned.
+
+## Lab (interactive experiments)
+
+- [XY scope](https://thebenn.me/lab/xy-scope.md): Two sine waves, one per stereo channel, drawn as an XY oscilloscope trace in WebGL. Change the ratio and phase and hear the picture you see.
+- [Beat pads](https://thebenn.me/lab/beat-pads.md): Eight synth pads in A minor pentatonic, an 808-style kick, snare, hat and clap, and a 16-step sequencer. All synthesized with the Web Audio API.
+- [Vision mixer](https://thebenn.me/lab/vision-mixer.md): A two-bus vision mixer like the ones in a TV control room: preview and program, CUT, AUTO over 25 frames, a T-bar, mix and wipe, and red tally.
+- [Viewfinder](https://thebenn.me/lab/viewfinder.md): A broadcast camera viewfinder over a real stadium shot: rule of thirds, action and title safe areas, zebra stripes for exposure, focus box and timecode.
+- [Blinking LEDs in ARM assembly](https://thebenn.me/lab/led-blink.md): Step through ARM assembly that lights the four LEDs on an STM32F4 Discovery board. Watch the registers and the GPIO output register change.
+
+## Pages
+
+- [About](https://thebenn.me/about/): background, story and tools
+- [Contact](https://thebenn.me/contact/): project enquiry form
+
+## Profiles
+
+- Instagram: https://www.instagram.com/bmkoscak/
+- X: https://x.com/the999benn
+- GitHub: https://github.com/BMKoscak
+- Spotify: https://open.spotify.com/artist/4gLTa6LUi720DnEUWjt76C
+- SoundCloud: https://on.soundcloud.com/kClOV6PSCE6bn2VOWU
