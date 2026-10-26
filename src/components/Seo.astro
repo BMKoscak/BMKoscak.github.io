@@ -1,0 +1,152 @@
+---
+import { SITE, SAME_AS } from '../data/site';
+
+export interface Crumb {
+	name: string;
+	url: string;
+}
+interface Props {
+	title: string;
+	description: string;
+	image?: string;
+	type?: 'website' | 'article' | 'profile';
+	crumbs?: Crumb[];
+	entity?: Record<string, unknown> | null;
+	noindex?: boolean;
+	published?: Date;
+	modified?: Date;
+}
+
+const {
+	title,
+	description,
+	image = SITE.ogDefault,
+	type = 'website',
+	crumbs = [],
+	entity = null,
+	noindex = false,
+	published,
+	modified,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const ogImage = new URL(image, SITE.url).href;
+const personId = `${SITE.url}/#person`;
+const siteId = `${SITE.url}/#website`;
+
+const graph: Record<string, unknown>[] = [
+	{
+		'@type': 'Person',
+		'@id': personId,
+		name: 'The Benn',
+		givenName: 'Ben',
+		url: `${SITE.url}/about/`,
+		image: `${SITE.url}/og/portrait.jpg`,
+		jobTitle: 'Creative web developer',
+		description:
+			'Freelance creative web developer in Slovenia. Builds websites, interactive 3D for the web and custom tools. Also works on live soccer broadcasts for SNL and NZS.',
+		address: { '@type': 'PostalAddress', addressLocality: 'Ljubljana', addressCountry: 'SI' },
+		affiliation: {
+			'@type': 'CollegeOrUniversity',
+			name: 'Faculty of Computer and Information Science, University of Ljubljana',
+			url: 'https://www.fri.uni-lj.si/en',
+		},
+		knowsAbout: [
+			'Web development',
+			'Astro',
+			'Three.js',
+			'WebGL',
+			'Web Audio API',
+			'Python',
+			'FastAPI',
+			'Model Context Protocol',
+			'Blender',
+			'Live sports broadcasting',
+			'Music production',
+		],
+		sameAs: SAME_AS,
+	},
+	{
+		'@type': 'ProfessionalService',
+		'@id': `${SITE.url}/#service`,
+		name: 'The Benn',
+		url: `${SITE.url}/`,
+		image: `${SITE.url}/og/home.jpg`,
+		description: SITE.description,
+		founder: { '@id': personId },
+		areaServed: ['Slovenia', 'European Union', 'Worldwide (remote)'],
+		address: { '@type': 'PostalAddress', addressLocality: 'Ljubljana', addressCountry: 'SI' },
+		knowsLanguage: ['en', 'sl'],
+		makesOffer: [
+			{ '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Website design and development' } },
+			{ '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Interactive 3D and creative coding for the web' } },
+			{ '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Custom tools, automation and AI integrations' } },
+		],
+	},
+	{
+		'@type': 'WebSite',
+		'@id': siteId,
+		url: `${SITE.url}/`,
+		name: 'The Benn',
+		description: SITE.description,
+		inLanguage: 'en',
+		publisher: { '@id': personId },
+	},
+	{
+		'@type': type === 'profile' ? 'ProfilePage' : 'WebPage',
+		'@id': `${canonical}#webpage`,
+		url: canonical,
+		name: title,
+		description,
+		isPartOf: { '@id': siteId },
+		inLanguage: 'en',
+		primaryImageOfPage: ogImage,
+		...(type === 'profile' ? { mainEntity: { '@id': personId } } : {}),
+		...(published ? { datePublished: published.toISOString() } : {}),
+		...(modified ? { dateModified: modified.toISOString() } : {}),
+		...(crumbs.length ? { breadcrumb: { '@id': `${canonical}#breadcrumb` } } : {}),
+	},
+];
+
+if (crumbs.length) {
+	graph.push({
+		'@type': 'BreadcrumbList',
+		'@id': `${canonical}#breadcrumb`,
+		itemListElement: crumbs.map((c, i) => ({
+			'@type': 'ListItem',
+			position: i + 1,
+			name: c.name,
+			item: new URL(c.url, SITE.url).href,
+		})),
+	});
+}
+if (entity) {
+	graph.push({ ...entity, mainEntityOfPage: { '@id': `${canonical}#webpage` } });
+}
+
+const ld = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c');
+const goat = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
+const gsc = import.meta.env.PUBLIC_GSC_VERIFICATION;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
+<meta name="author" content="The Benn" />
+<meta property="og:site_name" content="The Benn" />
+<meta property="og:type" content={type === 'article' ? 'article' : 'website'} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_GB" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@the999benn" />
+<meta name="twitter:creator" content="@the999benn" />
+{gsc && <meta name="google-site-verification" content={gsc} />}
+<link rel="alternate" type="text/plain" href="/llms.txt" title="LLM index" />
+<script type="application/ld+json" set:html={ld} />
+{goat && <script is:inline data-goatcounter={`https://${goat}.goatcounter.com/count`} data-goatcounter-settings='{"no_onload": true}' async src="//gc.zgo.at/count.js"></script>}

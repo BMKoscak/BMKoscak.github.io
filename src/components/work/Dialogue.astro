@@ -1,0 +1,132 @@
+---
+---
+
+<figure class="vn" data-widget="dialogue">
+	<div class="vn-stage">
+		<div class="vn-scene" aria-hidden="true">
+			<span class="sun"></span>
+			<span class="sea"></span>
+			<span class="pier"></span>
+		</div>
+		<div class="vn-box" data-box role="group" aria-label="Dialogue">
+			<p class="vn-who" data-who>Narrator</p>
+			<p class="vn-text" data-text aria-live="polite">Midday on the island. The beach bar is empty except for the owner, who keeps polishing the same glass.</p>
+			<div class="vn-choices" data-choices></div>
+		</div>
+	</div>
+	<aside class="vn-notebook">
+		<p class="mini-label">Notebook</p>
+		<ul data-notebook><li class="empty">No clues yet.</li></ul>
+	</aside>
+	<figcaption class="mini-label">Example scene written for this page.</figcaption>
+</figure>
+
+<style>
+	.vn {
+		margin: 0;
+		display: grid;
+		grid-template-columns: 1fr 240px;
+		gap: 1px;
+		background: var(--rule);
+		border: 1px solid var(--rule);
+	}
+	.vn > * {
+		background: var(--ink-2);
+	}
+	.vn-stage {
+		position: relative;
+		min-height: 360px;
+		display: flex;
+		align-items: flex-end;
+		padding: 18px;
+		overflow: hidden;
+	}
+	.vn-scene {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(#1d3b4f 0 55%, #11262f 55%);
+	}
+	.sun {
+		position: absolute;
+		right: 18%;
+		top: 14%;
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		background: var(--tape);
+		box-shadow: 0 0 60px rgba(240, 196, 58, 0.5);
+	}
+	.sea {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 55%;
+		height: 2px;
+		background: rgba(237, 230, 212, 0.4);
+	}
+	.pier {
+		position: absolute;
+		left: 8%;
+		width: 40%;
+		top: 62%;
+		height: 10px;
+		background: #6b4e2f;
+		transform: skewX(-30deg);
+	}
+	.vn-box {
+		position: relative;
+		width: 100%;
+		background: rgba(19, 17, 13, 0.92);
+		border: 1px solid var(--rule-hi);
+		padding: 14px 18px 16px;
+		cursor: pointer;
+	}
+	.vn-who {
+		margin: 0 0 4px;
+		font-family: var(--f-display);
+		font-weight: 800;
+		color: var(--tape);
+	}
+	.vn-text {
+		min-height: 3.2em;
+		margin: 0 0 12px;
+		font-size: var(--t-lg);
+		line-height: 1.45;
+	}
+	.vn-choices {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	.vn-choices :global(.btn) {
+		min-height: 40px;
+		font-size: var(--t-sm);
+	}
+	.vn-notebook {
+		padding: 18px;
+	}
+	.vn-notebook ul {
+		margin: 0;
+		padding-left: 1.1em;
+		font-family: var(--f-hand);
+		color: var(--bone);
+	}
+	.vn-notebook :global(li) {
+		margin-bottom: 10px;
+	}
+	.vn-notebook :global(li.empty) {
+		color: var(--bone-3);
+		list-style: none;
+		margin-left: -1.1em;
+	}
+	figcaption {
+		grid-column: 1 / -1;
+		padding: 10px 18px;
+		margin: 0;
+	}
+	@media (max-width: 760px) {
+		.vn {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

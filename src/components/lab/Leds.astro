@@ -1,0 +1,182 @@
+---
+const programs = [
+	{
+		name: 'Chase',
+		code: `        LDR   r0, =0x40020C14   @ GPIOD output data register
+        MOV   r1, #0x1000       @ start on PD12, the green LED
+loop:   STR   r1, [r0]          @ light that one LED
+        BL    delay             @ wait
+        LSL   r1, r1, #1        @ move to the next pin
+        CMP   r1, #0x10000      @ past PD15, the blue LED?
+        MOVEQ r1, #0x1000       @ then wrap back to green
+        B     loop              @ forever`,
+	},
+	{
+		name: 'Toggle all',
+		code: `        LDR   r0, =0x40020C14   @ GPIOD output data register
+loop:   LDR   r4, [r0]          @ read the current LED state
+        EOR   r4, r4, #0xF000   @ flip PD12 to PD15
+        STR   r4, [r0]          @ write it back
+        BL    delay             @ wait
+        B     loop              @ toggle LEDs forever`,
+	},
+];
+const leds = [
+	{ bit: 12, name: 'Green', pin: 'PD12', c: '#3ddc63' },
+	{ bit: 13, name: 'Orange', pin: 'PD13', c: '#ff9b2f' },
+	{ bit: 14, name: 'Red', pin: 'PD14', c: '#ff3b2f' },
+	{ bit: 15, name: 'Blue', pin: 'PD15', c: '#3b8bff' },
+];
+const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const lines = (code: string) => code.split('\n').map((l) => `<span class="ln">${esc(l)}</span>`).join('\n');
+const regs = [
+	['R0', '0'],
+	['R1', '1'],
+	['R4', '4'],
+	['ODR', 'odr'],
+	['Z flag', 'z'],
+	['Next', 'pc'],
+];
+---
+
+<div class="leds rack" data-widget="leds">
+	<div class="cell code-cell">
+		<div class="prog-tabs" role="group" aria-label="Program">
+			{programs.map((p, i) => <button type="button" class="chip" data-pick={i} aria-pressed={i === 0 ? 'true' : 'false'}>{p.name}</button>)}
+		</div>
+		{programs.map((p, i) => <pre class="asm" data-program hidden={i !== 0} set:html={lines(p.code)} />)}
+		<div class="asm-controls">
+			<button type="button" class="btn btn-tape" data-run aria-pressed="false">Run</button>
+			<button type="button" class="btn" data-stepbtn>Step</button>
+			<button type="button" class="btn" data-reset>Reset</button>
+			<div class="field speed">
+				<label for="speed">Speed</label>
+				<input id="speed" name="speed" type="range" min="0" max="100" value="55" />
+			</div>
+		</div>
+	</div>
+	<div class="cell board-cell">
+		<div class="board" aria-label="LED states">
+			{
+				leds.map((l) => (
+					<div class="led" data-led={l.bit} style={`--c:${l.c}`}>
+						<i />
+						<span>
+							{l.name} <small>{l.pin}</small>
+						</span>
+					</div>
+				))
+			}
+		</div>
+		<dl class="regs">
+			{
+				regs.map(([k, v]) => (
+					<div>
+						<dt>{k}</dt>
+						<dd class="num" data-reg={v}>
+							0
+						</dd>
+					</div>
+				))
+			}
+		</dl>
+		<p class="note" data-status aria-live="polite">0 instructions run</p>
+	</div>
+</div>
+
+<style>
+	.leds {
+		grid-template-columns: 1.4fr 1fr;
+	}
+	.prog-tabs {
+		display: flex;
+		gap: 8px;
+		margin-bottom: 14px;
+	}
+	.asm {
+		margin: 0 0 16px;
+		padding: 16px 0;
+		background: var(--ink-2);
+		border: 1px solid var(--rule);
+		overflow-x: auto;
+		font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+		font-size: 0.82rem;
+		line-height: 1.7;
+	}
+	.asm :global(.ln) {
+		display: inline-block;
+		min-width: 100%;
+		padding: 0 16px;
+		white-space: pre;
+	}
+	.asm :global(.ln.cur) {
+		background: var(--tape);
+		color: var(--tape-ink);
+	}
+	.asm-controls {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		align-items: end;
+	}
+	.speed {
+		flex: 1;
+		min-width: 140px;
+	}
+	.board {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 10px;
+		padding: 18px;
+		background: #0f3a22;
+		border: 1px solid #1d5a37;
+		margin-bottom: 18px;
+	}
+	.led {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-size: var(--t-sm);
+	}
+	.led small {
+		color: #9cc7ae;
+	}
+	.led i {
+		width: 16px;
+		height: 10px;
+		background: color-mix(in srgb, var(--c) 25%, #222);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		transition: background-color 0.08s, box-shadow 0.08s;
+	}
+	.led:global(.on) i {
+		background: var(--c);
+		box-shadow:
+			0 0 10px var(--c),
+			0 0 24px var(--c);
+	}
+	.regs {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1px;
+		background: var(--rule);
+		border: 1px solid var(--rule);
+		margin: 0 0 14px;
+	}
+	.regs div {
+		background: var(--ink);
+		padding: 8px 12px;
+	}
+	.regs dt {
+		font-size: var(--t-xs);
+		color: var(--bone-3);
+	}
+	.regs dd {
+		margin: 0;
+		font-size: var(--t-md);
+	}
+	@media (max-width: 860px) {
+		.leds {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

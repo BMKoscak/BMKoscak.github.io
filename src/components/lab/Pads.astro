@@ -1,0 +1,202 @@
+---
+const notes = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k'];
+const drums = [
+	{ id: 'kick', key: 'z', label: '808 kick' },
+	{ id: 'snare', key: 'x', label: 'Snare' },
+	{ id: 'hat', key: 'c', label: 'Hat' },
+	{ id: 'clap', key: 'v', label: 'Clap' },
+];
+// a starter drill-ish pattern so the loop plays something straight away
+const start: Record<string, number[]> = {
+	kick: [0, 7, 10],
+	snare: [4, 12],
+	hat: [0, 2, 3, 4, 6, 8, 9, 10, 12, 14, 15],
+	clap: [12],
+};
+---
+
+<div class="pads rack" data-widget="pads">
+	<div class="cell">
+		<p class="pad-label">Synth, A minor pentatonic</p>
+		<div class="pad-grid notes">
+			{
+				notes.map((k, i) => (
+					<button type="button" class="pad" data-note={i} data-key={k} aria-label={`Synth note ${i + 1}, key ${k.toUpperCase()}`}>
+						<kbd>{k.toUpperCase()}</kbd>
+					</button>
+				))
+			}
+		</div>
+		<p class="pad-label">Drums</p>
+		<div class="pad-grid drums">
+			{
+				drums.map((d) => (
+					<button type="button" class="pad drum" data-drum={d.id} data-key={d.key} aria-label={`${d.label}, key ${d.key.toUpperCase()}`}>
+						<kbd>{d.key.toUpperCase()}</kbd>
+						<span>{d.label}</span>
+					</button>
+				))
+			}
+		</div>
+		<p class="note" data-hint>Click a pad or use your keyboard. Sound turns on with the first hit.</p>
+	</div>
+	<div class="cell seq">
+		<div class="seq-head">
+			<button type="button" class="btn btn-tape" data-play aria-pressed="false">Play loop</button>
+			<div class="field tempo">
+				<label for="tempo">Tempo <b class="num" data-tempo-out>140</b> BPM</label>
+				<input id="tempo" name="tempo" type="range" min="70" max="180" value="140" />
+			</div>
+			<button type="button" class="btn" data-clear>Clear</button>
+		</div>
+		<div class="grid16" role="group" aria-label="16-step sequencer">
+			{
+				drums.map((d) => (
+					<div class="seq-row">
+						<span class="seq-name">{d.label}</span>
+						<div class="steps">
+							{Array.from({ length: 16 }, (_, i) => (
+								<button
+									type="button"
+									class:list={['step', { beat: i % 4 === 0 }]}
+									data-step
+									aria-pressed={start[d.id].includes(i) ? 'true' : 'false'}
+									aria-label={`${d.label} step ${i + 1}`}
+								/>
+							))}
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</div>
+
+<style>
+	.pads {
+		grid-template-columns: 1fr 1.3fr;
+	}
+	.pad-label {
+		font-size: var(--t-xs);
+		color: var(--bone-3);
+		margin: 0 0 10px;
+	}
+	.pad-grid {
+		display: grid;
+		gap: 8px;
+		margin-bottom: 22px;
+	}
+	.notes {
+		grid-template-columns: repeat(4, 1fr);
+	}
+	.drums {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.pad {
+		aspect-ratio: 1;
+		min-height: 48px;
+		display: grid;
+		place-items: center;
+		border: 1px solid var(--rule-hi);
+		background: var(--ink-2);
+		cursor: pointer;
+		transition: background-color 0.35s, border-color 0.35s, transform 0.08s;
+	}
+	.pad.drum {
+		aspect-ratio: auto;
+		padding: 14px;
+		display: flex;
+		justify-content: space-between;
+	}
+	.pad kbd {
+		font-family: var(--f-display);
+		font-weight: 800;
+		font-size: var(--t-lg);
+	}
+	.pad span {
+		font-size: var(--t-xs);
+		color: var(--bone-2);
+	}
+	.pad:hover {
+		border-color: var(--tape);
+	}
+	.pad:global(.hit) {
+		background: var(--tape);
+		border-color: var(--tape);
+		color: var(--tape-ink);
+		transform: scale(0.96);
+		transition: none;
+	}
+	.pad:global(.hit) span {
+		color: var(--tape-ink);
+	}
+	.seq-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: end;
+		gap: 16px;
+		margin-bottom: 22px;
+	}
+	.tempo {
+		flex: 1;
+		min-width: 160px;
+	}
+	.tempo b {
+		color: var(--tape);
+	}
+	.seq-row {
+		display: grid;
+		grid-template-columns: 70px 1fr;
+		align-items: center;
+		gap: 10px;
+		margin-bottom: 8px;
+	}
+	.seq-name {
+		font-size: var(--t-xs);
+		color: var(--bone-2);
+	}
+	.steps {
+		display: grid;
+		grid-template-columns: repeat(16, 1fr);
+		gap: 4px;
+	}
+	.step {
+		aspect-ratio: 1 / 1.4;
+		min-width: 0;
+		min-height: 24px;
+		border: 1px solid var(--rule-hi);
+		background: var(--ink-2);
+		cursor: pointer;
+		padding: 0;
+	}
+	.step.beat {
+		border-color: var(--bone-3);
+	}
+	.step[aria-pressed='true'] {
+		background: var(--bone);
+		border-color: var(--bone);
+	}
+	.step:global(.now) {
+		outline: 2px solid var(--tape);
+		outline-offset: -2px;
+	}
+	.step[aria-pressed='true']:global(.now) {
+		background: var(--tape);
+	}
+	@media (max-width: 860px) {
+		.pads {
+			grid-template-columns: 1fr;
+		}
+		.seq-row {
+			grid-template-columns: 1fr;
+			gap: 4px;
+		}
+		.steps {
+			grid-template-columns: repeat(8, 1fr);
+		}
+		.step {
+			aspect-ratio: auto;
+			min-height: 32px;
+		}
+	}
+</style>

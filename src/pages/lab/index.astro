@@ -1,0 +1,120 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ScopeBox from '../../components/ScopeBox.astro';
+import { SITE } from '../../data/site';
+
+const lab = (await getCollection('lab')).sort((a, b) => a.data.order - b.data.order);
+const entity = {
+	'@type': 'CollectionPage',
+	'@id': `${SITE.url}/lab/#collection`,
+	name: 'Lab',
+	hasPart: lab.map((l) => ({ '@type': 'WebApplication', name: l.data.title, url: `${SITE.url}/lab/${l.id}/`, applicationCategory: 'MultimediaApplication', operatingSystem: 'Any (web browser)' })),
+};
+---
+
+<Base
+	title="Lab: browser instruments and experiments | The Benn"
+	description="Small interactive instruments that run in the browser: an XY oscilloscope, beat pads, a vision mixer, a camera viewfinder and an ARM assembly stepper."
+	image="/og/lab.jpg"
+	crumbs={[
+		{ name: 'Home', url: '/' },
+		{ name: 'Lab', url: '/lab/' },
+	]}
+	entity={entity}
+>
+	<section class="wrap page-head">
+		<div class="rack head">
+			<div class="cell">
+				<h1 class="h-section">Lab</h1>
+				<p class="lede">Instruments from the places I have worked: a scope, a drum machine, a TV switcher, a camera and a microcontroller. Each one explains how the real thing works.</p>
+			</div>
+			<ScopeBox ratio="1:2:0" label="X:Y 1:2" class="head-scope" />
+		</div>
+	</section>
+	<section class="wrap" aria-label="Experiments">
+		<ol class="rack items">
+			{
+				lab.map((l) => (
+					<li>
+						<a class="item" href={`/lab/${l.id}/`}>
+							<h2 class="item-title display">{l.data.title}</h2>
+							<p class="muted">{l.data.summary}</p>
+							<span class="link-arrow">Open it</span>
+						</a>
+					</li>
+				))
+			}
+		</ol>
+	</section>
+</Base>
+
+<style>
+	.page-head {
+		padding-block: clamp(24px, 4vw, 48px) clamp(32px, 5vw, 64px);
+	}
+	.head {
+		grid-template-columns: 1.7fr 1fr;
+	}
+	.head .cell {
+		display: grid;
+		gap: 20px;
+		align-content: end;
+		padding-top: clamp(40px, 6vw, 96px);
+	}
+	.head h1 {
+		font-size: clamp(3.5rem, 1rem + 9vw, 9rem);
+	}
+	:global(.head-scope) {
+		min-height: 240px;
+	}
+	.items {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		grid-template-columns: repeat(6, 1fr);
+	}
+	.items li {
+		grid-column: span 2;
+	}
+	.items li:nth-child(n + 4) {
+		grid-column: span 3;
+	}
+	.item {
+		display: grid;
+		gap: 14px;
+		align-content: start;
+		height: 100%;
+		padding: var(--pad);
+		text-decoration: none;
+		transition: background-color 0.2s;
+	}
+	.item:hover {
+		background: var(--ink-2);
+	}
+	.item-title {
+		font-size: clamp(1.8rem, 1.2rem + 1.6vw, 2.6rem);
+		font-stretch: 100%;
+	}
+	.item:hover .item-title {
+		color: var(--tape);
+	}
+	.item p {
+		margin: 0;
+	}
+	.item .link-arrow {
+		justify-self: start;
+	}
+	@media (max-width: 860px) {
+		.head {
+			grid-template-columns: 1fr;
+		}
+		.items {
+			grid-template-columns: 1fr;
+		}
+		.items li,
+		.items li:nth-child(n + 4) {
+			grid-column: auto;
+		}
+	}
+</style>

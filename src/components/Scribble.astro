@@ -1,0 +1,53 @@
+---
+// Marker strokes with a seeded wobble, so they look drawn by hand but stay the
+// same between builds.
+interface Props {
+	kind: 'underline' | 'circle' | 'arrow' | 'cross';
+	seed?: number;
+	class?: string;
+	width?: number;
+	height?: number;
+}
+const { kind, seed = 1, class: cls = '', width = 200, height = 60 } = Astro.props;
+let s = seed * 9301 + 49297;
+const rnd = () => {
+	s = (s * 9301 + 49297) % 233280;
+	return s / 233280;
+};
+const j = (n: number) => (rnd() - 0.5) * n;
+let d = '';
+if (kind === 'underline') {
+	const y = height * 0.6;
+	d = `M ${2 + j(4)} ${y + j(4)} C ${width * 0.3} ${y - 6 + j(6)}, ${width * 0.65} ${y + 5 + j(6)}, ${width - 4} ${y - 3 + j(4)}`;
+	d += ` M ${width * 0.12} ${y + 8 + j(4)} C ${width * 0.4} ${y + 2 + j(5)}, ${width * 0.7} ${y + 9 + j(5)}, ${width * 0.9} ${y + 4 + j(4)}`;
+} else if (kind === 'circle') {
+	const cx = width / 2,
+		cy = height / 2,
+		rx = width / 2 - 6,
+		ry = height / 2 - 6;
+	const pts: string[] = [];
+	for (let i = 0; i <= 26; i++) {
+		const a = -2.2 + (i / 24) * Math.PI * 2;
+		const w = 1 + j(0.08);
+		pts.push(`${(cx + Math.cos(a) * rx * w).toFixed(1)} ${(cy + Math.sin(a) * ry * w).toFixed(1)}`);
+	}
+	d = 'M ' + pts.join(' L ');
+} else if (kind === 'arrow') {
+	d = `M 4 ${height - 8} C ${width * 0.35} ${height * 0.2 + j(8)}, ${width * 0.7} ${height * 0.15 + j(8)}, ${width - 10} ${height * 0.45}`;
+	d += ` M ${width - 26 + j(3)} ${height * 0.3 + j(3)} L ${width - 9} ${height * 0.46} L ${width - 28 + j(3)} ${height * 0.62 + j(3)}`;
+} else {
+	d = `M 6 ${6 + j(3)} L ${width - 6 + j(4)} ${height - 6} M ${width - 8} ${6 + j(3)} L ${6 + j(4)} ${height - 8}`;
+}
+---
+
+<svg class:list={['scribble', cls]} viewBox={`0 0 ${width} ${height}`} width={width} height={height} aria-hidden="true" focusable="false">
+	<path d={d} fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+
+<style>
+	.scribble {
+		color: var(--tape);
+		overflow: visible;
+		pointer-events: none;
+	}
+</style>

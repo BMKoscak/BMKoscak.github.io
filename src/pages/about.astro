@@ -1,0 +1,282 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Tape from '../components/Tape.astro';
+import ScopeBox from '../components/ScopeBox.astro';
+import Scribble from '../components/Scribble.astro';
+import portrait from '../assets/photos/ben-portrait.jpg';
+import camcorder from '../assets/photos/camcorder-bridge.jpg';
+import camAutumn from '../assets/photos/stadium-camera-autumn.jpg';
+import camVf from '../assets/photos/stadium-viewfinder.jpg';
+import lecture from '../assets/photos/fri-lecture-whiteboard.jpg';
+import laptop from '../assets/photos/laptop-code.jpg';
+import asmEditor from '../assets/photos/arm-assembly-editor.jpg';
+
+const tools = [
+	{ group: 'Web', items: ['Astro', 'HTML and CSS', 'JavaScript and TypeScript', 'Three.js and WebGL', 'Web Audio API', 'GSAP'] },
+	{ group: 'Code', items: ['Python', 'FastAPI', 'pygame', 'Java', 'SQL', 'ARM assembly'] },
+	{ group: 'Media', items: ['Blender', 'Unity', 'FL Studio', 'Video and photo editing'] },
+];
+---
+
+<Base
+	title="About The Benn: developer, ex-filmmaker and producer"
+	description="The Benn is a creative web developer from Slovenia. Films and photos first, then music, then live TV on SNL and NZS broadcasts, now code at FRI Ljubljana."
+	image="/og/about.jpg"
+	type="profile"
+	crumbs={[
+		{ name: 'Home', url: '/' },
+		{ name: 'About', url: '/about/' },
+	]}
+>
+	<section class="wrap about-head">
+		<div class="rack head">
+			<div class="cell head-copy">
+				<Tape r={1}>Ljubljana, Slovenia</Tape>
+				<h1 class="h-section">
+					Hi, I’m Ben. Online I’m <span class="ital">The&nbsp;Benn.</span>
+				</h1>
+				<p class="lede">
+					I’m a creative web developer. I build websites, interactive 3D and tools for people who want their thing to feel made, not generated.
+				</p>
+				<p class="muted">
+					I didn’t start with code. I started with a camera, then music, then live television. Every one of those taught me something I still use when I build for a client.
+				</p>
+			</div>
+			<Photo src={portrait} alt="Ben in sunglasses and a black T-shirt, one finger at his temple, against a blue sky." eager sizes="(max-width: 860px) 100vw, 38vw" class="head-photo" position="center 30%" develop={false} />
+		</div>
+	</section>
+
+	<section class="wrap section" aria-labelledby="story-title">
+		<h2 id="story-title" class="sr-only">How I got here</h2>
+		<ol class="chapters">
+			<li class="rack chapter">
+				<div class="cell ch-copy">
+					<p class="ch-num" aria-hidden="true">1</p>
+					<h3 class="h-block">The camera</h3>
+					<p>
+						Short films with friends and photos of whatever the light was doing. Film taught me framing and timing, and that nothing is finished until someone else watches it. Photography taught me to wait for the frame.
+					</p>
+				</div>
+				<Photo src={camcorder} alt="My camcorder resting on the railing of a wooden bridge, autumn trees behind it." sizes="(max-width: 860px) 100vw, 50vw" class="ch-photo" />
+			</li>
+			<li class="rack chapter">
+				<div class="cell ch-copy">
+					<p class="ch-num" aria-hidden="true">2</p>
+					<h3 class="h-block">The beats</h3>
+					<p>
+						The films needed sound, so I opened FL Studio and stayed for years. Drill beats, cold keys, heavy 808s. A loop is a hundred tiny decisions you only notice when one is wrong. My tracks are out as <a href="https://open.spotify.com/artist/4gLTa6LUi720DnEUWjt76C" target="_blank" rel="me noopener">The Benn on Spotify</a> and <a href="https://on.soundcloud.com/kClOV6PSCE6bn2VOWU" target="_blank" rel="me noopener">SoundCloud</a>.
+					</p>
+				</div>
+				<ScopeBox ratio="1:2:0" label="Kick and 808, 1:2" class="ch-scope">
+					<a class="scope-cta note" href="/lab/beat-pads/">play the pads</a>
+				</ScopeBox>
+			</li>
+			<li class="rack chapter">
+				<div class="cell ch-copy">
+					<p class="ch-num" aria-hidden="true">3</p>
+					<h3 class="h-block">Live TV</h3>
+					<p>
+						I help cover live soccer for SNL and NZS broadcasts, and I help with the software development behind them. In live production there is no second take. Things have to work the first time, every time, which is a good standard for websites too.
+					</p>
+				</div>
+				<div class="ch-pair">
+					<Photo src={camAutumn} alt="A broadcast camera on a tripod above a football pitch with autumn trees behind." sizes="(max-width: 860px) 60vw, 30vw" />
+					<Photo src={camVf} alt="Looking past a broadcast camera's viewfinder towards the pitch from the stand." sizes="(max-width: 860px) 40vw, 20vw" />
+				</div>
+			</li>
+			<li class="rack chapter">
+				<div class="cell ch-copy">
+					<p class="ch-num" aria-hidden="true">4</p>
+					<h3 class="h-block">Code</h3>
+					<p>
+						Now I study computer science at the Faculty of Computer and Information Science (FRI) in Ljubljana. Java, databases, operating systems, networks, statistics, and ARM assembly on real hardware. Outside class I build games, tools and websites, like this one.
+					</p>
+				</div>
+				<div class="ch-trio">
+					<Photo src={lecture} alt="A lecture room at FRI with code and diagrams on the whiteboards." sizes="(max-width: 860px) 100vw, 30vw" />
+					<Photo src={laptop} alt="My laptop open with code on the screen." sizes="(max-width: 860px) 50vw, 15vw" />
+					<Photo src={asmEditor} alt="ARM assembly in a code editor on a lab computer." sizes="(max-width: 860px) 50vw, 15vw" />
+				</div>
+			</li>
+		</ol>
+	</section>
+
+	<section class="wrap section" aria-labelledby="how-title">
+		<div class="rack how">
+			<div class="cell">
+				<h2 id="how-title" class="h-section">Working with me</h2>
+				<Scribble kind="underline" seed={7} width={260} height={36} />
+			</div>
+			<ul class="cell how-list">
+				<li><b>You talk to the person building it.</b> No account managers, no hand-offs.</li>
+				<li><b>You see it early.</b> Work in progress lives on a private link, so you can click around instead of reading reports.</li>
+				<li><b>It stays yours.</b> The code, the domain and the hosting accounts end up in your name.</li>
+				<li><b>AI where it helps.</b> I use AI coding tools to move faster. The design decisions, the testing and the responsibility stay with me.</li>
+			</ul>
+		</div>
+	</section>
+
+	<section class="wrap section" aria-labelledby="tools-title">
+		<h2 id="tools-title" class="h-block tools-title">Tools I reach for</h2>
+		<div class="rack tools">
+			{
+				tools.map((t) => (
+					<div class="cell">
+						<p class="mini-label">{t.group}</p>
+						<ul class="tool-list">
+							{t.items.map((i) => (
+								<li>{i}</li>
+							))}
+						</ul>
+					</div>
+				))
+			}
+		</div>
+	</section>
+</Base>
+
+<style>
+	.about-head {
+		padding-top: clamp(24px, 4vw, 48px);
+	}
+	.head {
+		grid-template-columns: 1.3fr 1fr;
+	}
+	.head-copy {
+		display: grid;
+		gap: 22px;
+		align-content: end;
+		padding-top: clamp(40px, 6vw, 96px);
+	}
+	.head-copy :global(.tape) {
+		justify-self: start;
+	}
+	.head-copy p {
+		margin: 0;
+	}
+	.head h1 {
+		font-size: clamp(2.6rem, 1rem + 5.4vw, 6rem);
+	}
+	.head h1 .ital {
+		font-weight: 400;
+		color: var(--tape);
+	}
+	.head :global(.head-photo) {
+		min-height: 520px;
+	}
+	.chapters {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: clamp(28px, 4vw, 56px);
+	}
+	.chapter {
+		grid-template-columns: 1fr 1.2fr;
+	}
+	.chapter:nth-child(even) {
+		grid-template-columns: 1.2fr 1fr;
+	}
+	.chapter:nth-child(even) .ch-copy {
+		order: 2;
+	}
+	.ch-copy {
+		display: grid;
+		gap: 14px;
+		align-content: center;
+	}
+	.ch-copy p {
+		margin: 0;
+		max-width: 52ch;
+	}
+	.ch-copy a {
+		text-decoration-color: var(--tape);
+	}
+	.ch-num {
+		font-family: var(--f-display);
+		font-weight: 900;
+		font-size: 5rem;
+		line-height: 0.8;
+		color: transparent;
+		-webkit-text-stroke: 1.5px var(--tape);
+	}
+	.chapter :global(.ch-photo) {
+		min-height: 360px;
+	}
+	:global(.ch-scope) {
+		min-height: 360px;
+	}
+	.scope-cta {
+		position: absolute;
+		right: 16px;
+		bottom: 12px;
+		z-index: 2;
+		transform: rotate(-3deg);
+	}
+	.ch-pair {
+		display: grid;
+		grid-template-columns: 1.5fr 1fr;
+		gap: 1px;
+		background: var(--rule);
+		min-height: 380px;
+	}
+	.ch-trio {
+		display: grid;
+		grid-template-columns: 1.6fr 1fr 1fr;
+		gap: 1px;
+		background: var(--rule);
+		min-height: 380px;
+	}
+	.how {
+		grid-template-columns: 1fr 1.4fr;
+	}
+	.how-list {
+		list-style: none;
+		margin: 0;
+		display: grid;
+		gap: 18px;
+	}
+	.how-list b {
+		display: block;
+		font-weight: 650;
+		margin-bottom: 2px;
+	}
+	.how-list li {
+		color: var(--bone-2);
+	}
+	.tools-title {
+		margin-bottom: 22px;
+	}
+	.tools {
+		grid-template-columns: repeat(3, 1fr);
+	}
+	.tool-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 6px;
+	}
+	@media (max-width: 860px) {
+		.head,
+		.chapter,
+		.chapter:nth-child(even),
+		.how,
+		.tools {
+			grid-template-columns: 1fr;
+		}
+		.chapter:nth-child(even) .ch-copy {
+			order: 0;
+		}
+		.head :global(.head-photo) {
+			min-height: 420px;
+		}
+		.ch-trio {
+			grid-template-columns: 1fr 1fr;
+		}
+		.ch-trio > :global(:first-child) {
+			grid-column: 1 / -1;
+		}
+	}
+</style>

@@ -1,0 +1,85 @@
+---
+---
+
+<figure class="ab" data-widget="alphabeta">
+	<div class="ab-head">
+		<p class="mini-label">Minimax on the textbook tree. Triangles up pick the highest score, triangles down pick the lowest.</p>
+		<div class="ab-btns">
+			<button type="button" class="btn btn-tape" data-run-ab>Run search</button>
+			<button type="button" class="btn" data-step-ab>Step</button>
+			<button type="button" class="chip" data-prune aria-pressed="true">Pruning: on</button>
+		</div>
+	</div>
+	<div class="tree" data-tree>
+		<p class="muted">The interactive tree needs JavaScript. Leaves 3, 12, 8 / 2, 4, 6 / 14, 5, 2: the best move scores 3, and pruning skips the leaves 4 and 6.</p>
+	</div>
+	<figcaption class="note" data-ab-out aria-live="polite">Leaves looked at: 0 of 9.</figcaption>
+</figure>
+
+<style>
+	.ab {
+		margin: 0;
+		padding: var(--pad);
+		border: 1px solid var(--rule);
+		background: var(--ink-2);
+	}
+	.ab-head {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 14px;
+		align-items: end;
+		margin-bottom: 10px;
+	}
+	.ab-head p {
+		max-width: 46ch;
+		margin: 0;
+	}
+	.ab-btns {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	.tree {
+		overflow-x: auto;
+	}
+	.tree :global(svg) {
+		min-width: 560px;
+		width: 100%;
+	}
+	.tree :global(.edge) {
+		stroke: var(--rule-hi);
+		stroke-width: 1.5;
+	}
+	.tree :global(.edge.cut) {
+		stroke: var(--tally);
+		stroke-dasharray: 4 4;
+	}
+	.tree :global(.node path),
+	.tree :global(.node rect) {
+		fill: var(--ink);
+		stroke: var(--bone-3);
+		stroke-width: 1.5;
+	}
+	.tree :global(.node text) {
+		fill: var(--bone);
+		font: 700 15px var(--f-display);
+	}
+	.tree :global(.node.seen rect),
+	.tree :global(.node.done path) {
+		fill: var(--tape);
+		stroke: var(--tape);
+	}
+	.tree :global(.node.seen text),
+	.tree :global(.node.done text) {
+		fill: var(--tape-ink);
+	}
+	.tree :global(.node.cut rect) {
+		stroke: var(--tally);
+		stroke-dasharray: 3 3;
+	}
+	.tree :global(.node.cut text) {
+		fill: var(--bone-3);
+		text-decoration: line-through;
+	}
+</style>

@@ -1,0 +1,76 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import WorkCard from '../../components/WorkCard.astro';
+import ScopeBox from '../../components/ScopeBox.astro';
+import { SITE } from '../../data/site';
+
+const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+const entity = {
+	'@type': 'CollectionPage',
+	'@id': `${SITE.url}/work/#collection`,
+	name: 'Case studies',
+	hasPart: work.map((w) => ({ '@type': 'CreativeWork', name: w.data.title, url: `${SITE.url}/work/${w.id}/` })),
+};
+---
+
+<Base
+	title="Work: games, 3D, tools and websites | The Benn"
+	description="Case studies from The Benn: an N64-style browser game, an open-source MCP hub, a Blender car commercial, a visual novel and a chess AI."
+	image="/og/work.jpg"
+	crumbs={[
+		{ name: 'Home', url: '/' },
+		{ name: 'Work', url: '/work/' },
+	]}
+	entity={entity}
+>
+	<section class="wrap page-head">
+		<div class="rack head">
+			<div class="cell">
+				<h1 class="h-section">Work</h1>
+				<p class="lede">
+					Five projects, each with the problem, the decisions and the numbers. Games, a developer tool, a 3D film and the AI behind a board game.
+				</p>
+			</div>
+			<ScopeBox ratio="5:4:0.1" label="X:Y 5:4" class="head-scope" />
+		</div>
+	</section>
+	<section class="wrap" aria-label="Case studies">
+		<div class="rack list">
+			{work.map((w, i) => <WorkCard entry={w} size={i === 0 ? 'xl' : 'l'} headingLevel={2} />)}
+		</div>
+	</section>
+</Base>
+
+<style>
+	.page-head {
+		padding-block: clamp(24px, 4vw, 48px) clamp(32px, 5vw, 64px);
+	}
+	.head {
+		grid-template-columns: 1.7fr 1fr;
+	}
+	.head .cell {
+		display: grid;
+		gap: 20px;
+		align-content: end;
+		padding-top: clamp(40px, 6vw, 96px);
+	}
+	.head h1 {
+		font-size: clamp(3.5rem, 1rem + 9vw, 9rem);
+	}
+	:global(.head-scope) {
+		min-height: 240px;
+	}
+	.list {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.list > :global(.wcard-xl) {
+		grid-column: 1 / -1;
+	}
+	@media (max-width: 860px) {
+		.head,
+		.list {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -1,0 +1,149 @@
+---
+import Base from '../layouts/Base.astro';
+import ScopeBox from '../components/ScopeBox.astro';
+import Tape from '../components/Tape.astro';
+import { SITE, SOCIAL } from '../data/site';
+const socials = SOCIAL.filter((s) => ['Instagram', 'X', 'GitHub'].includes(s.label));
+---
+
+<Base
+	title="Contact The Benn | Hire a web developer in Slovenia"
+	description="Start a project with The Benn: websites, interactive 3D and custom tools. Send a short message about what you need and I’ll reply by email."
+	image="/og/contact.jpg"
+	crumbs={[
+		{ name: 'Home', url: '/' },
+		{ name: 'Contact', url: '/contact/' },
+	]}
+>
+	<section class="wrap contact">
+		<div class="rack grid">
+			<div class="cell intro">
+				<Tape r={2}>Taking new projects</Tape>
+				<h1 class="h-section">Start a project</h1>
+				<p class="lede">Tell me what you are making and what you need from me. A few lines are enough to start.</p>
+				<p class="muted">Useful to include: what it is, who it is for, any links you like, and when you need it.</p>
+				<ScopeBox ratio="1:1:0.25" label="Waiting for signal" class="contact-scope" />
+				<div class="elsewhere">
+					<p class="mini-label">Or message me</p>
+					<ul>
+						{
+							socials.map((s) => (
+								<li>
+									<a href={s.url} target="_blank" rel="me noopener">
+										{s.label} <span class="muted">{s.handle}</span>
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			</div>
+			<form class="cell form" action={SITE.formAction} method="POST" data-contact-form>
+				<input type="hidden" name="_subject" value="New project enquiry from thebenn.me" />
+				<p class="hp" aria-hidden="true"><label>Leave this empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label></p>
+				<div class="field">
+					<label for="f-name">Your name</label>
+					<input id="f-name" name="name" type="text" autocomplete="name" required />
+				</div>
+				<div class="field">
+					<label for="f-email">Email</label>
+					<input id="f-email" name="email" type="email" autocomplete="email" required />
+					<small>I only use it to reply.</small>
+				</div>
+				<div class="field">
+					<label for="f-kind">What do you need?</label>
+					<select id="f-kind" name="project_type">
+						<option>A website</option>
+						<option>Interactive 3D or a browser game</option>
+						<option>A custom tool, automation or AI integration</option>
+						<option>Something else</option>
+					</select>
+				</div>
+				<div class="field">
+					<label for="f-when">When do you need it? <span class="muted">(optional)</span></label>
+					<input id="f-when" name="timeline" type="text" placeholder="For example: before the end of March" />
+				</div>
+				<div class="field">
+					<label for="f-msg">Message</label>
+					<textarea id="f-msg" name="message" required></textarea>
+				</div>
+				<div class="submit">
+					<button class="btn btn-tape" type="submit">Send message</button>
+					<p class="status" data-form-status role="status"></p>
+				</div>
+			</form>
+		</div>
+	</section>
+</Base>
+
+<style>
+	.contact {
+		padding-top: clamp(24px, 4vw, 48px);
+	}
+	.grid {
+		grid-template-columns: 1fr 1.1fr;
+	}
+	.intro {
+		display: grid;
+		gap: 20px;
+		align-content: start;
+	}
+	.intro :global(.tape) {
+		justify-self: start;
+	}
+	.intro p {
+		margin: 0;
+	}
+	.intro h1 {
+		font-size: clamp(3rem, 1rem + 6vw, 6.5rem);
+	}
+	:global(.contact-scope) {
+		min-height: 200px;
+		border: 1px solid var(--rule);
+	}
+	.elsewhere ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 6px;
+	}
+	.elsewhere a {
+		text-decoration: none;
+		font-weight: 600;
+	}
+	.elsewhere a:hover {
+		color: var(--tape);
+	}
+	.form {
+		display: grid;
+		gap: 20px;
+		align-content: start;
+	}
+	.hp {
+		position: absolute;
+		left: -9999px;
+	}
+	.submit {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 16px;
+	}
+	.status {
+		margin: 0;
+		font-size: var(--t-sm);
+		color: var(--bone-2);
+	}
+	.status[data-state='ok'] {
+		color: var(--tape);
+	}
+	.status[data-state='err'] {
+		color: var(--tally);
+	}
+	@media (max-width: 860px) {
+		.grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

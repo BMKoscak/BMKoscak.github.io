@@ -1,0 +1,49 @@
+---
+// A scope screen. The persistent WebGL canvas draws the trace into the element
+// with [data-scope]; the graticule, labels and a static SVG fallback live here.
+interface Props {
+	ratio?: string; // "a:b:phase"
+	label?: string;
+	class?: string;
+	widget?: string;
+	hint?: string;
+	drift?: number;
+	speed?: number;
+}
+const { ratio = '3:2:0.25', label, class: cls = '', widget, hint, drift, speed } = Astro.props;
+const [a, b, ph] = ratio.split(':').map(Number);
+const pts: string[] = [];
+for (let i = 0; i <= 400; i++) {
+	const t = (i / 400) * Math.PI * 2;
+	const x = 50 + 46 * Math.sin(a * t + (ph || 0) * Math.PI * 2);
+	const y = 50 - 46 * Math.sin(b * t);
+	pts.push(`${x.toFixed(2)} ${y.toFixed(2)}`);
+}
+---
+
+<div class:list={['scope-box', cls]} data-widget={widget}>
+	<div class="graticule" aria-hidden="true"></div>
+	<div class="scope-target" data-scope={ratio} data-drift={drift} data-speed={speed} aria-hidden="true">
+		<svg class="scope-fallback" viewBox="0 0 100 100" preserveAspectRatio="none"><path d={'M ' + pts.join(' L ')}></path></svg>
+	</div>
+	{label && <span class="scope-readout tl">{label}</span>}
+	{hint && <span class="scope-readout br hand" data-scope-hint>{hint}</span>}
+	<slot />
+</div>
+
+<style>
+	.scope-target {
+		position: absolute;
+		inset: 0;
+	}
+	.tl {
+		left: 14px;
+		top: 12px;
+	}
+	.br {
+		right: 14px;
+		bottom: 10px;
+		font-size: var(--t-sm);
+		color: var(--tape);
+	}
+</style>

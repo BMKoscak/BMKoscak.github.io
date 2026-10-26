@@ -1,0 +1,258 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Photo from './Photo.astro';
+interface Props {
+	entry: CollectionEntry<'work'>;
+	size?: 'xl' | 'l' | 'm' | 's';
+	headingLevel?: 2 | 3;
+}
+const { entry, size = 'm', headingLevel = 3 } = Astro.props;
+const d = entry.data;
+const H = `h${headingLevel}` as 'h2' | 'h3';
+const keyFacts = d.facts.slice(0, size === 'xl' ? 3 : 2);
+// the big card is tall, so it gets a wide scenic shot rather than the title screen
+const img = size === 'xl' && d.gallery[0] ? d.gallery[0].src : d.cover;
+---
+
+<article class:list={['wcard', `wcard-${size}`, { 'has-img': !!d.cover }]}>
+	{
+		img && (
+			<div class="wcard-media" transition:name={`cover-${entry.id}`}>
+				<Photo
+					src={img}
+					alt=""
+					sizes={size === 'xl' ? '(max-width: 760px) 100vw, 60vw' : '(max-width: 760px) 100vw, 40vw'}
+					widths={[480, 800, 1200]}
+				/>
+			</div>
+		)
+	}
+	{
+		!d.cover && (
+			<div class:list={['wcard-art', `art-${entry.id}`]} aria-hidden="true">
+				{entry.id === 'porsche-night-commercial' && (
+					<>
+						<span class="streak s1" />
+						<span class="streak s2" />
+						<span class="streak s3" />
+						<span class="ratio">2.39:1</span>
+					</>
+				)}
+				{entry.id === 'chess-ai' && <span class="board" />}
+				{entry.id === 'island-mystery-visual-novel' && (
+					<>
+						<span class="sun" />
+						<span class="box">Somebody is lying about the time.</span>
+					</>
+				)}
+			</div>
+		)
+	}
+	<div class="wcard-body">
+		<p class="wcard-kind">{d.kind}<span>{d.status}</span></p>
+		<H class="wcard-title" transition:name={`title-${entry.id}`}>
+			<a href={`/work/${entry.id}/`}>{d.title}</a>
+		</H>
+		<p class="wcard-sum">{d.summary}</p>
+		<dl class="wcard-facts">
+			{
+				keyFacts.map((f) => (
+					<div>
+						<dt>{f.label}</dt>
+						<dd>{f.value}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</div>
+</article>
+
+<style>
+	.wcard {
+		position: relative;
+		display: grid;
+		grid-template-rows: auto 1fr;
+		background: var(--ink);
+		min-width: 0;
+	}
+	.wcard-media :global(.photo) {
+		aspect-ratio: 16 / 9;
+	}
+	.wcard-xl {
+		grid-template-rows: 1fr auto;
+	}
+	.wcard-xl .wcard-media {
+		display: grid;
+	}
+	.wcard-xl .wcard-media :global(.photo) {
+		aspect-ratio: auto;
+		min-height: 320px;
+		height: 100%;
+	}
+	.wcard-art {
+		position: relative;
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+		background: var(--ink-2);
+	}
+	.art-porsche-night-commercial {
+		background: linear-gradient(#000 0 12%, #0e1820 12% 88%, #000 88%);
+	}
+	.streak {
+		position: absolute;
+		left: -10%;
+		right: -10%;
+		height: 2px;
+		filter: blur(0.5px);
+	}
+	.s1 {
+		top: 38%;
+		background: linear-gradient(90deg, transparent, #ff8a2a 30%, transparent 70%);
+		box-shadow: 0 0 12px #ff8a2a;
+	}
+	.s2 {
+		top: 52%;
+		background: linear-gradient(90deg, transparent 20%, #3fd2e8 50%, transparent 90%);
+		box-shadow: 0 0 12px #3fd2e8;
+	}
+	.s3 {
+		top: 66%;
+		background: linear-gradient(90deg, transparent 5%, #ff8a2a 60%, transparent);
+		box-shadow: 0 0 10px #ff8a2a;
+		opacity: 0.6;
+	}
+	.ratio {
+		position: absolute;
+		right: 16px;
+		bottom: 16%;
+		font-family: var(--f-display);
+		font-weight: 800;
+		font-stretch: 70%;
+		font-size: 2.4rem;
+		color: var(--bone);
+		opacity: 0.85;
+	}
+	.board {
+		position: absolute;
+		top: 12%;
+		left: 50%;
+		height: 76%;
+		aspect-ratio: 1;
+		transform: translateX(-50%);
+		background:
+			linear-gradient(var(--tape), var(--tape)) 71.4% 28.6% / 12.5% 12.5% no-repeat,
+			linear-gradient(var(--tape), var(--tape)) 28.6% 71.4% / 12.5% 12.5% no-repeat,
+			repeating-conic-gradient(var(--ink-3) 0 25%, var(--ink) 0 50%) 0 0 / 25% 25%;
+		border: 1px solid var(--rule-hi);
+	}
+	.art-island-mystery-visual-novel {
+		background: linear-gradient(#1d3b4f 0 58%, #11262f 58%);
+	}
+	.art-island-mystery-visual-novel .sun {
+		position: absolute;
+		right: 16%;
+		top: 14%;
+		width: 15%;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: var(--tape);
+	}
+	.art-island-mystery-visual-novel .box {
+		position: absolute;
+		left: 6%;
+		right: 6%;
+		bottom: 8%;
+		padding: 10px 14px;
+		background: rgba(19, 17, 13, 0.92);
+		border: 1px solid var(--rule-hi);
+		font-size: var(--t-sm);
+	}
+	.wcard-body {
+		display: grid;
+		gap: 12px;
+		align-content: start;
+		padding: var(--pad);
+	}
+	.wcard-kind {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 14px;
+		margin: 0;
+		font-size: var(--t-xs);
+		color: var(--tape);
+		font-weight: 600;
+	}
+	.wcard-kind span {
+		color: var(--bone-3);
+		font-weight: 500;
+	}
+	.wcard-title {
+		font-family: var(--f-display);
+		font-weight: 800;
+		font-stretch: 100%;
+		font-size: clamp(1.7rem, 1.1rem + 1.8vw, 2.6rem);
+		line-height: 0.98;
+		letter-spacing: -0.01em;
+	}
+	.wcard-xl .wcard-title {
+		font-size: clamp(2.2rem, 1.2rem + 3vw, 4rem);
+	}
+	.wcard-title a {
+		text-decoration: none;
+	}
+	/* the whole card is the link target */
+	.wcard-title a::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 3;
+	}
+	.wcard-title a:focus-visible {
+		outline: none;
+	}
+	.wcard:has(a:focus-visible) {
+		outline: 2px solid var(--tape);
+		outline-offset: -2px;
+	}
+	.wcard-sum {
+		margin: 0;
+		color: var(--bone-2);
+		max-width: 52ch;
+	}
+	.wcard-facts {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px 28px;
+		margin: 6px 0 0;
+	}
+	.wcard-facts dt {
+		font-size: var(--t-xs);
+		color: var(--bone-3);
+	}
+	.wcard-facts dd {
+		margin: 0;
+		font-family: var(--f-display);
+		font-weight: 700;
+		font-stretch: 85%;
+		font-size: var(--t-lg);
+	}
+	.wcard::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 3px;
+		background: var(--tape);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.35s var(--ease);
+		z-index: 4;
+	}
+	.wcard:hover::before {
+		transform: scaleX(1);
+	}
+	.wcard:hover .wcard-title {
+		color: var(--tape);
+	}
+</style>

@@ -1,0 +1,554 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ScopeBox from '../components/ScopeBox.astro';
+import WorkCard from '../components/WorkCard.astro';
+import Photo from '../components/Photo.astro';
+import Tape from '../components/Tape.astro';
+import Scribble from '../components/Scribble.astro';
+import { SERVICES, SITE } from '../data/site';
+import portrait from '../assets/photos/ben-portrait.jpg';
+import camHills from '../assets/photos/stadium-camera-hills.jpg';
+import camAutumn from '../assets/photos/stadium-camera-autumn.jpg';
+import camVf from '../assets/photos/stadium-viewfinder.jpg';
+
+const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+const lab = (await getCollection('lab')).sort((a, b) => a.data.order - b.data.order);
+const [hera, nexus, porsche, novel, chess] = [
+	'chains-of-hera',
+	'mcp-nexus',
+	'porsche-night-commercial',
+	'island-mystery-visual-novel',
+	'chess-ai',
+].map((id) => work.find((w) => w.id === id)!);
+---
+
+<Base
+	title="The Benn | Freelance creative web developer in Slovenia"
+	description="Freelance creative web developer in Ljubljana, Slovenia. Fast Astro websites, interactive 3D and WebGL, and custom tools, by someone who also works live TV."
+	image="/og/home.jpg"
+>
+	<!-- HERO -->
+	<section class="wrap hero" aria-labelledby="hero-title">
+		<div class="rack hero-rack">
+			<div class="cell hero-mark">
+				<Tape r={2} class="hero-tape">Freelance · Ljubljana, Slovenia</Tape>
+				<h1 id="hero-title">
+					<span class="wordmark" data-wordmark><span>The</span> <span>Benn</span></span>
+					<span class="h1-line">Creative web developer in Slovenia</span>
+				</h1>
+			</div>
+			<ScopeBox ratio="3:2:0.25" label="X:Y 3:2" hint="Press and hold to hear it" widget="scope-hero" class="hero-scope" drift={0.05} speed={0.3}>
+				<p class="hero-note note" aria-hidden="true">that’s sound,<br />not a drawing</p>
+			</ScopeBox>
+			<div class="cell hero-copy">
+				<p class="lede">
+					I build websites that load fast and feel alive, interactive 3D for the web, and tools that save people time. Before code I worked behind cameras, mixing desks and microphones, and I still help cover live soccer for TV.
+				</p>
+				<div class="hero-ctas">
+					<a class="btn btn-tape" href="/contact/">Start a project</a>
+					<a class="btn" href="/work/">See the work</a>
+				</div>
+			</div>
+			<dl class="cell hero-facts">
+				<div><dt>Based in</dt><dd>Ljubljana, CET</dd></div>
+				<div><dt>Builds with</dt><dd>Astro, Three.js, Python</dd></div>
+				<div><dt>Studies</dt><dd>Computer science, FRI</dd></div>
+				<div><dt>Also on</dt><dd>SNL &amp; NZS broadcasts</dd></div>
+			</dl>
+		</div>
+	</section>
+
+	<!-- SERVICES -->
+	<section class="wrap section" aria-labelledby="services-title">
+		<div class="sec-head">
+			<h2 id="services-title" class="h-section">What I can build for you</h2>
+			<p class="muted sec-aside">
+				Three kinds of work, usually mixed. A studio site with a 3D piece on the front page. A tool with a dashboard someone actually likes using.
+			</p>
+		</div>
+		<div class="rack services">
+			{
+				SERVICES.map((s) => (
+					<article class="cell service" id={s.id}>
+						<h3 class="h-item">{s.title}</h3>
+						<p class="muted">{s.body}</p>
+						<ul class="ticks">
+							{s.deliverables.map((d) => (
+								<li>{d}</li>
+							))}
+						</ul>
+					</article>
+				))
+			}
+		</div>
+	</section>
+
+	<!-- WORK -->
+	<section class="wrap section" aria-labelledby="work-title">
+		<div class="sec-head">
+			<h2 id="work-title" class="h-section">Selected work</h2>
+			<a class="link-arrow" href="/work/">All case studies</a>
+		</div>
+		<div class="rack bento">
+			<div class="b-hera"><WorkCard entry={hera} size="xl" /></div>
+			<div class="b-nexus"><WorkCard entry={nexus} size="l" /></div>
+			<div class="b-porsche"><WorkCard entry={porsche} size="m" /></div>
+			<div class="b-novel"><WorkCard entry={novel} size="m" /></div>
+			<div class="b-chess"><WorkCard entry={chess} size="m" /></div>
+		</div>
+	</section>
+
+	<!-- BROADCAST -->
+	<section class="wrap section" aria-labelledby="live-title">
+		<div class="rack live">
+			<div class="cell live-copy">
+				<p class="onair"><i aria-hidden="true"></i>Live</p>
+				<h2 id="live-title" class="h-section">Live soccer on Slovenian TV</h2>
+				<p class="lede">
+					I help cover live SNL and NZS matches, and I help with the software development behind the broadcasts.
+				</p>
+				<p class="muted">
+					Live TV has no second take. Every camera, graphic and cut has to land on the same frame, ninety minutes straight. That habit of building things that must not break is the one I bring to client work.
+				</p>
+				<div class="live-links">
+					<a class="link-arrow" href="/lab/vision-mixer/">Try the vision mixer</a>
+					<a class="link-arrow" href="/lab/viewfinder/">Look through the viewfinder</a>
+				</div>
+			</div>
+			<div class="live-photos">
+				<Photo src={camAutumn} alt="A broadcast camera on a tripod above an athletics track, looking over a football pitch with autumn trees behind." sizes="(max-width: 760px) 100vw, 40vw" class="lp-a" />
+				<Photo src={camVf} alt="Looking past a broadcast camera's viewfinder towards a football pitch from the stand." sizes="(max-width: 760px) 50vw, 20vw" class="lp-b" position="center 40%" />
+				<Photo src={camHills} alt="A broadcast camera beside the pitch at a stadium with green hills and houses behind." sizes="(max-width: 760px) 50vw, 20vw" class="lp-c" />
+			</div>
+		</div>
+	</section>
+
+	<!-- LAB -->
+	<section class="wrap section" aria-labelledby="lab-title">
+		<div class="sec-head">
+			<h2 id="lab-title" class="h-section">The lab</h2>
+			<p class="muted sec-aside">Small instruments that run in your browser. Every sound is synthesized live and nothing is downloaded.</p>
+		</div>
+		<ul class="rack lab-list">
+			{
+				lab.map((l) => (
+					<li class="lab-row">
+						<a href={`/lab/${l.id}/`}>
+							<span class="lab-name">{l.data.title}</span>
+							<span class="lab-sum muted">{l.data.summary}</span>
+							<span class="lab-go">Open</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<!-- MUSIC -->
+	<section class="wrap section" aria-labelledby="music-title">
+		<div class="rack music">
+			<div class="cell">
+				<h2 id="music-title" class="h-block">Before code, there were beats</h2>
+				<p class="muted">
+					I made drill beats in FL Studio for years: cold keys, heavy 808s, patterns that never sit still. It is why everything on this site makes a sound. My music is out as The Benn.
+				</p>
+				<div class="music-links">
+					<a class="btn" href="https://open.spotify.com/artist/4gLTa6LUi720DnEUWjt76C" target="_blank" rel="me noopener">The Benn on Spotify</a>
+					<a class="btn" href="https://on.soundcloud.com/kClOV6PSCE6bn2VOWU" target="_blank" rel="me noopener">SoundCloud</a>
+				</div>
+			</div>
+			<div class="cell player" data-widget="embed" data-src="https://open.spotify.com/embed/artist/4gLTa6LUi720DnEUWjt76C?utm_source=generator&theme=0" data-title="The Benn on Spotify">
+				<button type="button" class="player-load">
+					<span class="hand">Load the Spotify player</span>
+					<small class="muted">Loads content from Spotify</small>
+				</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- ABOUT TEASER -->
+	<section class="wrap section" aria-labelledby="me-title">
+		<div class="rack me">
+			<Photo src={portrait} alt="Ben in sunglasses and a black T-shirt, one finger at his temple, against a blue sky." sizes="(max-width: 760px) 100vw, 35vw" class="me-photo" position="center 30%">
+				<Tape r={3} class="cap">that’s me</Tape>
+			</Photo>
+			<div class="cell me-copy">
+				<h2 id="me-title" class="h-section">
+					Camera, then sound,<br />then code.
+				</h2>
+				<p class="lede">
+					I started with short films and photos, moved to music, ended up in live TV, and now study computer science at FRI in Ljubljana.
+				</p>
+				<p class="muted">
+					Each tool fed the next one. Framing from film, timing from music, reliability from live TV. That mix is what you get when you hire me for a website.
+				</p>
+				<a class="link-arrow" href="/about/">The longer story</a>
+				<Scribble kind="underline" seed={4} width={220} height={40} class="me-scribble" />
+			</div>
+		</div>
+	</section>
+</Base>
+
+<style>
+	/* hero */
+	.hero {
+		padding-top: clamp(16px, 2.5vw, 32px);
+	}
+	.hero-rack {
+		grid-template-columns: 1.55fr 1fr;
+		grid-template-areas:
+			'mark scope'
+			'copy facts';
+	}
+	.hero-mark {
+		grid-area: mark;
+		position: relative;
+		padding-top: clamp(36px, 5vw, 72px);
+		padding-bottom: clamp(20px, 3vw, 36px);
+		overflow: hidden;
+	}
+	:global(.hero-tape) {
+		margin-bottom: clamp(18px, 2.5vw, 28px);
+	}
+	h1 {
+		display: grid;
+		gap: 14px;
+	}
+	.wordmark {
+		--wd: 125;
+		display: block;
+		font-family: var(--f-display);
+		font-weight: 900;
+		font-stretch: calc(var(--wd) * 1%);
+		font-size: clamp(4.6rem, 1rem + 10vw, 12.5rem);
+		line-height: 0.82;
+		letter-spacing: -0.02em;
+		text-transform: uppercase;
+		contain: layout paint;
+	}
+	.wordmark > span {
+		display: block;
+		white-space: nowrap;
+	}
+	.h1-line {
+		font-family: var(--f-serif);
+		font-style: italic;
+		font-weight: 400;
+		font-size: var(--t-2xl);
+		line-height: 1.15;
+		color: var(--bone);
+	}
+	:global(.hero-scope) {
+		grid-area: scope;
+		min-height: 340px;
+		cursor: crosshair;
+		touch-action: none;
+	}
+	.hero-note {
+		position: absolute;
+		left: 16px;
+		bottom: 14px;
+		margin: 0;
+		transform: rotate(-4deg);
+		font-size: var(--t-sm);
+	}
+	.hero-copy {
+		grid-area: copy;
+		display: grid;
+		gap: 24px;
+		align-content: start;
+	}
+	.hero-ctas {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+	.hero-facts {
+		grid-area: facts;
+		margin: 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 18px 24px;
+		align-content: start;
+	}
+	.hero-facts dt {
+		font-size: var(--t-xs);
+		color: var(--bone-3);
+	}
+	.hero-facts dd {
+		margin: 2px 0 0;
+		font-weight: 600;
+	}
+
+	/* section heads */
+	.sec-head {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: end;
+		gap: 16px 40px;
+		margin-bottom: clamp(24px, 3.5vw, 44px);
+	}
+	.sec-aside {
+		max-width: 44ch;
+		margin: 0;
+	}
+
+	/* services */
+	.services {
+		grid-template-columns: repeat(3, 1fr);
+	}
+	.service {
+		display: grid;
+		gap: 14px;
+		align-content: start;
+	}
+	.service p {
+		margin: 0;
+	}
+	.ticks {
+		list-style: none;
+		margin: 6px 0 0;
+		padding: 0;
+		display: grid;
+		gap: 6px;
+		font-size: var(--t-sm);
+	}
+	.ticks li {
+		padding-left: 22px;
+		position: relative;
+	}
+	.ticks li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.55em;
+		width: 12px;
+		height: 6px;
+		border-left: 2px solid var(--tape);
+		border-bottom: 2px solid var(--tape);
+		transform: rotate(-45deg) translateY(-2px);
+	}
+
+	/* bento */
+	.bento {
+		grid-template-columns: repeat(12, 1fr);
+		grid-template-areas:
+			'hera hera hera hera hera hera hera nexus nexus nexus nexus nexus'
+			'hera hera hera hera hera hera hera porsche porsche porsche porsche porsche'
+			'novel novel novel novel novel novel chess chess chess chess chess chess';
+	}
+	.bento > div {
+		display: grid;
+	}
+	.b-hera {
+		grid-area: hera;
+	}
+	.b-nexus {
+		grid-area: nexus;
+	}
+	.b-porsche {
+		grid-area: porsche;
+	}
+	.b-novel {
+		grid-area: novel;
+	}
+	.b-chess {
+		grid-area: chess;
+	}
+
+	/* live */
+	.live {
+		grid-template-columns: 1fr 1.15fr;
+	}
+	.live-copy {
+		display: grid;
+		gap: 18px;
+		align-content: start;
+	}
+	.live-copy p {
+		margin: 0;
+	}
+	.onair {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		justify-self: start;
+		padding: 4px 10px;
+		border: 1px solid var(--tally);
+		color: var(--tally);
+		font-weight: 700;
+		font-size: var(--t-xs);
+		letter-spacing: 0.08em;
+	}
+	.onair i {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--tally);
+		animation: blink 1.6s steps(1) infinite;
+	}
+	@keyframes blink {
+		50% {
+			opacity: 0.2;
+		}
+	}
+	.live-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 18px 28px;
+		margin-top: 6px;
+	}
+	.live-photos {
+		display: grid;
+		grid-template-columns: 1.3fr 1fr;
+		grid-template-rows: 1fr 1fr;
+		gap: 1px;
+		background: var(--rule);
+		min-height: 460px;
+	}
+	.live-photos :global(.lp-a) {
+		grid-row: 1 / 3;
+	}
+
+	/* lab list */
+	.lab-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.lab-row a {
+		display: grid;
+		grid-template-columns: minmax(180px, 1fr) 2fr auto;
+		gap: 24px;
+		align-items: baseline;
+		padding: 22px var(--pad);
+		text-decoration: none;
+		transition: background-color 0.2s;
+	}
+	.lab-row a:hover {
+		background: var(--ink-2);
+	}
+	.lab-name {
+		font-family: var(--f-display);
+		font-weight: 800;
+		font-size: var(--t-xl);
+		font-stretch: 95%;
+	}
+	.lab-row a:hover .lab-name {
+		color: var(--tape);
+	}
+	.lab-go {
+		font-size: var(--t-sm);
+		font-weight: 600;
+		border-bottom: 2px solid var(--tape);
+	}
+
+	/* music */
+	.music {
+		grid-template-columns: 1fr 1fr;
+	}
+	.music > .cell:first-child {
+		display: grid;
+		gap: 18px;
+		align-content: center;
+	}
+	.music p {
+		margin: 0;
+	}
+	.music-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+	.player {
+		min-height: 352px;
+		padding: 0;
+		display: grid;
+	}
+	.player-load {
+		display: grid;
+		place-content: center;
+		gap: 6px;
+		border: 0;
+		background:
+			repeating-linear-gradient(90deg, rgba(240, 196, 58, 0.08) 0 2px, transparent 2px 9px),
+			var(--ink-2);
+		cursor: pointer;
+		font-size: var(--t-lg);
+		color: var(--tape);
+	}
+	.player :global(iframe) {
+		width: 100%;
+		height: 352px;
+		border: 0;
+	}
+
+	/* me */
+	.me {
+		grid-template-columns: 0.8fr 1.2fr;
+	}
+	.me :global(.me-photo) {
+		min-height: 520px;
+	}
+	.me-copy {
+		position: relative;
+		display: grid;
+		gap: 20px;
+		align-content: center;
+	}
+	.me-copy p {
+		margin: 0;
+	}
+	:global(.me-scribble) {
+		margin-top: -14px;
+	}
+
+	@media (max-width: 1000px) {
+		.hero-rack {
+			grid-template-columns: 1fr;
+			grid-template-areas: 'mark' 'scope' 'copy' 'facts';
+		}
+		:global(.hero-scope) {
+			min-height: 260px;
+		}
+		.services {
+			grid-template-columns: 1fr;
+		}
+		.bento {
+			grid-template-columns: 1fr 1fr;
+			grid-template-areas:
+				'hera hera'
+				'nexus porsche'
+				'novel chess';
+		}
+		.live,
+		.music,
+		.me {
+			grid-template-columns: 1fr;
+		}
+	}
+	@media (max-width: 640px) {
+		.bento {
+			grid-template-columns: 1fr;
+			grid-template-areas: 'hera' 'nexus' 'porsche' 'novel' 'chess';
+		}
+		.hero-facts {
+			grid-template-columns: 1fr;
+		}
+		.lab-row a {
+			grid-template-columns: 1fr;
+			gap: 6px;
+		}
+		.lab-go {
+			justify-self: start;
+		}
+		.live-photos {
+			min-height: 380px;
+		}
+		.me :global(.me-photo) {
+			min-height: 420px;
+		}
+	}
+</style>

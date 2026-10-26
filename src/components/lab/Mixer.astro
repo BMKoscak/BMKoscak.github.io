@@ -1,0 +1,168 @@
+---
+import { getImage } from 'astro:assets';
+import cam1 from '../../assets/photos/stadium-camera-hills.jpg';
+import cam2 from '../../assets/photos/stadium-camera-autumn.jpg';
+const c1 = await getImage({ src: cam1, width: 960, format: 'webp', quality: 70 });
+const c2 = await getImage({ src: cam2, width: 960, format: 'webp', quality: 70 });
+const style = `--cam1:url(${c1.src});--cam2:url(${c2.src})`;
+---
+
+<div class="mixer rack" data-widget="mixer" style={style}>
+	<div class="cell monitors">
+		<div class="mon">
+			<div class="screen" data-pvw data-src="cam1"></div>
+			<p class="mon-label"><span class="pvw-tag">Preview</span> <span data-pvw-label>Cam 1</span></p>
+		</div>
+		<div class="mon">
+			<div class="screen" data-pgm data-src="bars">
+				<div class="screen over" data-over data-src="cam1"></div>
+			</div>
+			<p class="mon-label"><span class="pgm-tag">Program</span> <span data-pgm-label>Bars</span></p>
+		</div>
+	</div>
+	<div class="cell panel">
+		<div class="bus">
+			<p class="bus-name">Preview bus</p>
+			<div class="bus-btns">
+				<button type="button" class="key" data-pvw-src="bars">Bars <i class="tally" data-tally="bars"></i></button>
+				<button type="button" class="key" data-pvw-src="cam1">Cam 1 <i class="tally" data-tally="cam1"></i></button>
+				<button type="button" class="key" data-pvw-src="cam2">Cam 2 <i class="tally" data-tally="cam2"></i></button>
+			</div>
+		</div>
+		<div class="bus">
+			<p class="bus-name">Transition</p>
+			<div class="bus-btns">
+				<button type="button" class="key" data-type="mix" aria-pressed="true">Mix</button>
+				<button type="button" class="key" data-type="wipe" aria-pressed="false">Wipe</button>
+				<button type="button" class="key cut" data-cut>Cut</button>
+				<button type="button" class="key auto" data-auto>Auto</button>
+			</div>
+		</div>
+		<div class="field tbar">
+			<label for="tbar">T-bar</label>
+			<input id="tbar" name="tbar" type="range" min="0" max="100" value="0" />
+		</div>
+		<p class="note" data-log aria-live="polite">Bars are on air. Cam 1 is waiting on preview.</p>
+	</div>
+</div>
+
+<style>
+	.mixer {
+		grid-template-columns: 1.5fr 1fr;
+	}
+	.monitors {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 14px;
+	}
+	.screen {
+		position: relative;
+		aspect-ratio: 16 / 9;
+		background: #000 center / cover no-repeat;
+	}
+	.screen[data-src='cam1'] {
+		background-image: var(--cam1);
+	}
+	.screen[data-src='cam2'] {
+		background-image: var(--cam2);
+	}
+	.screen[data-src='bars'] {
+		background-image: linear-gradient(
+			90deg,
+			#c0c0c0 0 14.28%,
+			#c0c000 0 28.57%,
+			#00c0c0 0 42.85%,
+			#00c000 0 57.14%,
+			#c000c0 0 71.42%,
+			#c00000 0 85.71%,
+			#0000c0 0
+		);
+	}
+	.over {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+	}
+	.mon:first-child .screen {
+		outline: 2px solid #3fa35c;
+	}
+	.mon:last-child .screen {
+		outline: 2px solid var(--tally);
+	}
+	.mon-label {
+		margin: 10px 0 0;
+		font-size: var(--t-sm);
+		display: flex;
+		gap: 10px;
+	}
+	.pvw-tag {
+		color: #6cc787;
+		font-weight: 650;
+	}
+	.pgm-tag {
+		color: var(--tally);
+		font-weight: 650;
+	}
+	.panel {
+		display: grid;
+		gap: 18px;
+		align-content: start;
+	}
+	.bus-name {
+		font-size: var(--t-xs);
+		color: var(--bone-3);
+		margin: 0 0 8px;
+	}
+	.bus-btns {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+	.key {
+		position: relative;
+		min-height: 44px;
+		min-width: 64px;
+		padding: 0 14px;
+		border: 1px solid var(--rule-hi);
+		background: var(--ink-2);
+		font-weight: 650;
+		font-size: var(--t-sm);
+		cursor: pointer;
+	}
+	.key[aria-pressed='true'] {
+		background: #2d5b39;
+		border-color: #6cc787;
+	}
+	.key.cut,
+	.key.auto {
+		border-color: var(--bone-2);
+	}
+	.tally {
+		position: absolute;
+		top: 4px;
+		right: 4px;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--rule-hi);
+	}
+	.tally:global(.on) {
+		background: var(--tally);
+		box-shadow: 0 0 8px var(--tally);
+	}
+	.tbar input {
+		width: 100%;
+		accent-color: var(--tape);
+		height: 30px;
+	}
+	@media (max-width: 860px) {
+		.mixer {
+			grid-template-columns: 1fr;
+		}
+	}
+	@media (max-width: 520px) {
+		.monitors {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

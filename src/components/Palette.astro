@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+const lab = (await getCollection('lab')).sort((a, b) => a.data.order - b.data.order);
+const items = [
+	{ label: 'Home', hint: 'Page', href: '/' },
+	{ label: 'Work', hint: 'Page', href: '/work/' },
+	...work.map((w) => ({ label: w.data.title, hint: 'Case study', href: `/work/${w.id}/` })),
+	{ label: 'Lab', hint: 'Page', href: '/lab/' },
+	...lab.map((l) => ({ label: l.data.title, hint: 'Lab', href: `/lab/${l.id}/` })),
+	{ label: 'About', hint: 'Page', href: '/about/' },
+	{ label: 'Contact', hint: 'Page', href: '/contact/' },
+	{ label: 'Turn sound on or off', hint: 'Action', action: 'sound' },
+	{ label: 'Copy link to this page', hint: 'Action', action: 'copy' },
+	{ label: 'Source on GitHub', hint: 'External', href: 'https://github.com/BMKoscak' },
+];
+---
+
+<dialog class="palette" data-palette aria-label="Jump to a page or action">
+	<input type="text" placeholder="Type a page or action" aria-label="Search pages and actions" autocomplete="off" spellcheck="false" />
+	<ul role="listbox" aria-label="Results">
+		{
+			items.map((it) => (
+				<li>
+					<button type="button" role="option" aria-selected="false" data-href={it.href} data-action={it.action}>
+						<span>{it.label}</span>
+						<span>{it.hint}</span>
+					</button>
+				</li>
+			))
+		}
+	</ul>
+	<p class="palette-foot">Arrow keys to move, Enter to open, Esc to close.</p>
+</dialog>

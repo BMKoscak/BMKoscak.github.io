@@ -1,0 +1,376 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Photo from '../../components/Photo.astro';
+import Tape from '../../components/Tape.astro';
+import ScopeBox from '../../components/ScopeBox.astro';
+import Timeline from '../../components/work/Timeline.astro';
+import AlphaBeta from '../../components/work/AlphaBeta.astro';
+import Dialogue from '../../components/work/Dialogue.astro';
+import { SITE } from '../../data/site';
+
+export async function getStaticPaths() {
+	const all = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+	return all.map((entry, i) => ({ params: { slug: entry.id }, props: { entry, next: all[(i + 1) % all.length] } }));
+}
+
+const { entry, next } = Astro.props;
+const d = entry.data;
+const { Content, headings } = await render(entry);
+const url = `${SITE.url}/work/${entry.id}/`;
+const ratios = ['3:2:0.25', '5:4:0.1', '1:2:0', '4:3:0.2', '2:3:0.3'];
+const ratio = ratios[(d.order - 1) % ratios.length];
+
+const entity: Record<string, unknown> = {
+	'@type': d.schemaType,
+	'@id': `${url}#work`,
+	name: d.title,
+	headline: d.seoTitle,
+	description: d.description,
+	url,
+	author: { '@id': `${SITE.url}/#person` },
+	creator: { '@id': `${SITE.url}/#person` },
+	datePublished: d.published.toISOString().slice(0, 10),
+	image: `${SITE.url}/og/work-${entry.id}.jpg`,
+	keywords: d.stack.join(', '),
+	inLanguage: 'en',
+};
+if (d.schemaType === 'VideoGame') {
+	entity.gamePlatform = d.stack.includes('pygame') ? 'Desktop (Python)' : 'Web browser';
+	entity.genre = d.kind;
+	const play = d.links.find((l) => l.label.toLowerCase().includes('play'));
+	if (play) entity.url = play.url;
+	entity.applicationCategory = 'Game';
+	entity.operatingSystem = d.stack.includes('pygame') ? 'Windows, macOS, Linux' : 'Any (web browser)';
+}
+if (d.schemaType === 'SoftwareSourceCode') {
+	const repo = d.links.find((l) => l.url.includes('github.com'));
+	if (repo) entity.codeRepository = repo.url;
+	entity.programmingLanguage = 'Python';
+	entity.license = 'https://opensource.org/licenses/MIT';
+}
+if (d.schemaType === 'SoftwareApplication') {
+	entity.applicationCategory = 'GameApplication';
+	entity.operatingSystem = 'Windows, macOS, Linux';
+}
+const sameAs = d.links.filter((l) => l.url.includes('github.com')).map((l) => l.url);
+if (sameAs.length) entity.sameAs = sameAs;
+const h2s = headings.filter((h) => h.depth === 2);
+---
+
+<Base
+	title={d.seoTitle.length + 11 <= 62 ? `${d.seoTitle} | The Benn` : d.seoTitle}
+	description={d.description}
+	image={`/og/work-${entry.id}.jpg`}
+	type="article"
+	published={d.published}
+	modified={d.updated}
+	crumbs={[
+		{ name: 'Home', url: '/' },
+		{ name: 'Work', url: '/work/' },
+		{ name: d.title, url: `/work/${entry.id}/` },
+	]}
+	entity={entity}
+>
+	<article>
+		<header class="wrap case-head">
+			<nav class="crumbs" aria-label="Breadcrumb"><a href="/work/">Work</a> <span aria-hidden="true">/</span> <span aria-current="page">{d.title}</span></nav>
+			<div class="rack head-rack">
+				<div class="cell head-main">
+					<div class="tags">
+						<Tape r={1}>{d.kind}</Tape>
+						<span class="muted">{d.status}{d.year ? ` · ${d.year}` : ''}</span>
+					</div>
+					<h1 class="case-title display" transition:name={`title-${entry.id}`}>{d.title}</h1>
+					<p class="lede">{d.summary}</p>
+					{
+						d.links.length > 0 && (
+							<div class="case-links">
+								{d.links.map((l, i) => (
+									<a class:list={['btn', { 'btn-tape': i === 0 }]} href={l.url} target={l.url.startsWith(SITE.url) ? undefined : '_blank'} rel={l.url.startsWith(SITE.url) ? undefined : 'noopener'} data-astro-reload={l.url.startsWith(SITE.url) ? '' : undefined}>
+										{l.label}
+									</a>
+								))}
+							</div>
+						)
+					}
+				</div>
+				<ScopeBox ratio={ratio} label={`Signal ${ratio.split(':').slice(0, 2).join(':')}`} class="head-scope" />
+			</div>
+		</header>
+
+		{
+			d.cover && (
+				<div class="wrap cover-wrap" transition:name={`cover-${entry.id}`}>
+					<Photo src={d.cover} alt={d.coverAlt || d.title} eager sizes="(max-width: 1440px) 100vw, 1440px" widths={[640, 960, 1280, 1600]} develop={false} class="cover" position="center 35%" />
+				</div>
+			)
+		}
+
+		<section class="wrap spec" aria-labelledby="spec-title">
+			<h2 id="spec-title" class="sr-only">Project facts</h2>
+			<dl class="rack facts" style={`--cols:${d.facts.length % 4 === 0 ? 4 : d.facts.length === 3 || d.facts.length === 6 ? 3 : 4}`}>
+				{
+					d.facts.map((f) => (
+						<div class="cell fact">
+							<dt>{f.label}</dt>
+							<dd>{f.value}</dd>
+						</div>
+					))
+				}
+			</dl>
+			<div class="rack meta">
+				<div class="cell">
+					<p class="mini-label">My role</p>
+					<p class="meta-text">{d.role}</p>
+				</div>
+				<div class="cell">
+					<p class="mini-label">Built with</p>
+					<ul class="stack">{d.stack.map((s) => <li>{s}</li>)}</ul>
+				</div>
+			</div>
+		</section>
+
+		<div class="wrap body-grid">
+			<aside class="toc" aria-label="On this page">
+				<p class="mini-label">On this page</p>
+				<ol>
+					{h2s.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+				</ol>
+			</aside>
+			<div class="prose case-body">
+				<Content />
+				{
+					d.widget !== 'none' && (
+						<div class="widget-slot">
+							{d.widget === 'timeline' && <Timeline />}
+							{d.widget === 'alphabeta' && <AlphaBeta />}
+							{d.widget === 'dialogue' && <Dialogue />}
+						</div>
+					)
+				}
+			</div>
+		</div>
+
+		{
+			d.gallery.length > 0 && (
+				<section class="wrap gallery-wrap" aria-labelledby="gallery-title">
+					<h2 id="gallery-title" class="h-block">Screens</h2>
+					<div class="rack gallery">
+						{d.gallery.map((g) => (
+							<figure class="g-item">
+								<Photo src={g.src} alt={g.alt} sizes="(max-width: 760px) 100vw, 50vw" widths={[480, 800, 1200]} />
+								{g.caption && <figcaption>{g.caption}</figcaption>}
+							</figure>
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		<nav class="wrap next" aria-label="Next case study">
+			<a class="next-link" href={`/work/${next.id}/`}>
+				<span class="mini-label">Next case study</span>
+				<span class="next-title display">{next.data.title}</span>
+				<span class="muted">{next.data.summary}</span>
+			</a>
+		</nav>
+	</article>
+</Base>
+
+<style>
+	.case-head {
+		padding-top: clamp(24px, 4vw, 48px);
+	}
+	.crumbs {
+		font-size: var(--t-sm);
+		color: var(--bone-2);
+		margin-bottom: 18px;
+	}
+	.crumbs a {
+		color: var(--bone-2);
+	}
+	.crumbs a:hover {
+		color: var(--tape);
+	}
+	.head-rack {
+		grid-template-columns: 1.7fr 1fr;
+	}
+	.head-main {
+		display: grid;
+		gap: 22px;
+		align-content: start;
+		padding-block: clamp(28px, 4vw, 56px);
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 16px;
+		font-size: var(--t-sm);
+	}
+	.case-title {
+		font-size: clamp(2.8rem, 1.2rem + 6vw, 6.5rem);
+		font-stretch: 105%;
+		max-width: 13ch;
+	}
+	.case-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+	:global(.head-scope) {
+		min-height: 260px;
+	}
+	.cover-wrap {
+		margin-top: 1px;
+	}
+	.cover-wrap :global(.cover) {
+		aspect-ratio: 21 / 9;
+		border: 1px solid var(--rule);
+		border-top: 0;
+	}
+	.spec {
+		margin-top: clamp(40px, 6vw, 80px);
+	}
+	.facts {
+		margin: 0;
+		grid-template-columns: repeat(var(--cols, 4), 1fr);
+	}
+	.fact dt {
+		font-size: var(--t-xs);
+		color: var(--bone-3);
+		margin-bottom: 6px;
+	}
+	.fact dd {
+		margin: 0;
+		font-family: var(--f-display);
+		font-size: var(--t-xl);
+		font-weight: 700;
+		font-stretch: 85%;
+		line-height: 1.15;
+		font-variant-numeric: tabular-nums;
+	}
+	.meta {
+		grid-template-columns: 1.4fr 1fr;
+		border-top: 0;
+	}
+	.meta-text {
+		margin: 0;
+		max-width: 60ch;
+	}
+	.stack {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+	.stack li {
+		padding: 4px 10px;
+		border: 1px solid var(--rule-hi);
+		font-size: var(--t-sm);
+	}
+	.body-grid {
+		display: grid;
+		grid-template-columns: 220px minmax(0, 1fr);
+		gap: clamp(24px, 5vw, 80px);
+		margin-top: clamp(48px, 7vw, 100px);
+	}
+	.toc {
+		position: sticky;
+		top: calc(var(--header-h) + 24px);
+		align-self: start;
+	}
+	.toc ol {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 8px;
+		border-left: 1px solid var(--rule);
+	}
+	.toc a {
+		display: block;
+		padding-left: 14px;
+		margin-left: -1px;
+		border-left: 2px solid transparent;
+		font-size: var(--t-sm);
+		color: var(--bone-2);
+		text-decoration: none;
+	}
+	.toc a:hover {
+		color: var(--bone);
+		border-left-color: var(--tape);
+	}
+	.case-body :global(h2:first-child) {
+		margin-top: 0;
+	}
+	.widget-slot {
+		margin-top: 2.4em;
+		max-width: none;
+	}
+	.gallery-wrap {
+		margin-top: clamp(56px, 8vw, 110px);
+		display: grid;
+		gap: 22px;
+	}
+	.gallery {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.g-item {
+		margin: 0;
+	}
+	.g-item :global(.photo) {
+		aspect-ratio: 16 / 10;
+	}
+	.g-item figcaption {
+		padding: 12px 16px 16px;
+		font-size: var(--t-sm);
+		color: var(--bone-2);
+	}
+	.next {
+		margin-top: clamp(56px, 8vw, 110px);
+	}
+	.next-link {
+		display: grid;
+		gap: 10px;
+		padding: var(--pad);
+		border: 1px solid var(--rule);
+		text-decoration: none;
+		transition: border-color 0.2s;
+	}
+	.next-link:hover {
+		border-color: var(--tape);
+	}
+	.next-title {
+		font-size: var(--t-4xl);
+	}
+	@media (max-width: 960px) {
+		.head-rack,
+		.meta {
+			grid-template-columns: 1fr;
+		}
+		:global(.head-scope) {
+			min-height: 200px;
+		}
+		.facts {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.body-grid {
+			grid-template-columns: 1fr;
+		}
+		.toc {
+			display: none;
+		}
+	}
+	@media (max-width: 520px) {
+		.gallery {
+			grid-template-columns: 1fr;
+		}
+		.cover-wrap :global(.cover) {
+			aspect-ratio: 4 / 3;
+		}
+	}
+</style>

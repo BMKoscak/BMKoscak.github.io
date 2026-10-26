@@ -1,0 +1,58 @@
+---
+import { NAV, SOCIAL } from '../data/site';
+import { getCollection } from 'astro:content';
+const work = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+const year = new Date().getFullYear();
+const onContact = Astro.url.pathname.startsWith('/contact');
+---
+
+<footer class="site-footer">
+	<div class="rack">
+		<div class="cell foot-cta">
+			{
+				onContact ? (
+					<p class="h-section">Thanks for stopping by.</p>
+				) : (
+					<>
+						<p class="h-section">Got a project?</p>
+						<p class="muted" style="max-width:40ch;margin:0">
+							Websites, interactive pieces and tools for studios, brands and teams. Tell me what you have in mind.
+						</p>
+						<div>
+							<a class="btn btn-tape" href="/contact/">Start a project</a>
+						</div>
+					</>
+				)
+			}
+		</div>
+		<div class="cell">
+			<p class="foot-label">Pages</p>
+			<ul class="foot-list">
+				<li><a href="/">Home</a></li>
+				{NAV.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+			</ul>
+			<p class="foot-label" style="margin-top:22px">Case studies</p>
+			<ul class="foot-list">
+				{work.map((w) => <li><a href={`/work/${w.id}/`}>{w.data.title}</a></li>)}
+			</ul>
+		</div>
+		<div class="cell">
+			<p class="foot-label">Elsewhere</p>
+			<ul class="foot-list">
+				{
+					SOCIAL.map((s) => (
+						<li>
+							<a href={s.url} rel="me noopener" target="_blank">
+								{s.label} <span class="muted">{s.handle}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+	<div class="wrap foot-base">
+		<span>© {year} The Benn. Made in Ljubljana, Slovenia.</span>
+		<span>Static HTML, no cookies. Press <kbd>/</kbd> to jump anywhere.</span>
+	</div>
+</footer>

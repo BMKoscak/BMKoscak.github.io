@@ -1,0 +1,74 @@
+---
+import ScopeBox from '../ScopeBox.astro';
+const presets = [
+	{ label: 'Circle 1:1', v: '1:1:90' },
+	{ label: 'Figure eight 1:2', v: '1:2:0' },
+	{ label: 'Knot 3:2', v: '3:2:90' },
+	{ label: 'Lace 5:4', v: '5:4:45' },
+	{ label: 'Star 7:6', v: '7:6:30' },
+];
+---
+
+<div class="lab-scope rack" data-widget="scope">
+	<ScopeBox ratio="3:2:0.25" label="CH1 X · CH2 Y" class="lab-screen" />
+	<div class="cell controls">
+		<div class="row2">
+			<div class="field">
+				<label for="ratio-a">Left (X) multiple <b class="num" data-out="a"></b></label>
+				<input id="ratio-a" name="ratio-a" type="range" min="1" max="9" step="1" value="3" />
+				<small data-out="fx"></small>
+			</div>
+			<div class="field">
+				<label for="ratio-b">Right (Y) multiple <b class="num" data-out="b"></b></label>
+				<input id="ratio-b" name="ratio-b" type="range" min="1" max="9" step="1" value="2" />
+				<small data-out="fy"></small>
+			</div>
+		</div>
+		<div class="field">
+			<label for="phase">Phase <b class="num" data-out="phase"></b></label>
+			<input id="phase" name="phase" type="range" min="0" max="360" step="1" value="90" />
+		</div>
+		<div class="field">
+			<label for="drift">Drift <b class="num" data-out="drift"></b></label>
+			<input id="drift" name="drift" type="range" min="0" max="40" step="1" value="6" />
+		</div>
+		<div class="presets" role="group" aria-label="Presets">
+			{presets.map((p) => <button type="button" class="chip" data-preset={p.v}>{p.label}</button>)}
+		</div>
+		<button type="button" class="btn btn-tape" data-listen aria-pressed="false">Listen to it</button>
+	</div>
+</div>
+
+<style>
+	.lab-scope {
+		grid-template-columns: 1.4fr 1fr;
+	}
+	.lab-scope :global(.lab-screen) {
+		aspect-ratio: 5 / 4;
+		background: var(--ink);
+	}
+	.controls {
+		display: grid;
+		gap: 22px;
+		align-content: start;
+	}
+	.row2 {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 18px;
+	}
+	label b {
+		color: var(--tape);
+		margin-left: 6px;
+	}
+	.presets {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	@media (max-width: 860px) {
+		.lab-scope {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -1,0 +1,10 @@
+---
+interface Props {
+	r?: 0 | 1 | 2 | 3;
+	as?: 'span' | 'p';
+	class?: string;
+}
+const { r = 0, as: Tag = 'span', class: cls = '' } = Astro.props;
+---
+
+<Tag class:list={['tape', r ? `r${r}` : '', cls]}><slot /></Tag>

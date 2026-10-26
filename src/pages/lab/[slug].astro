@@ -1,0 +1,192 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ScopeBox from '../../components/ScopeBox.astro';
+import ScopeLab from '../../components/lab/ScopeLab.astro';
+import Pads from '../../components/lab/Pads.astro';
+import Mixer from '../../components/lab/Mixer.astro';
+import Viewfinder from '../../components/lab/Viewfinder.astro';
+import Leds from '../../components/lab/Leds.astro';
+import Photo from '../../components/Photo.astro';
+import { SITE } from '../../data/site';
+import stm32Poster from '../../assets/photos/stm32-poster.jpg';
+import armWhiteboard from '../../assets/photos/arm-subroutine-whiteboard.jpg';
+import armToggle from '../../assets/photos/arm-toggle-leds.jpg';
+import { getImage } from 'astro:assets';
+
+export async function getStaticPaths() {
+	const all = (await getCollection('lab')).sort((a, b) => a.data.order - b.data.order);
+	return all.map((entry, i) => ({ params: { slug: entry.id }, props: { entry, next: all[(i + 1) % all.length] } }));
+}
+const { entry, next } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+const url = `${SITE.url}/lab/${entry.id}/`;
+const poster = d.widget === 'leds' ? await getImage({ src: stm32Poster, width: 720, format: 'webp' }) : null;
+const entity = {
+	'@type': 'WebApplication',
+	'@id': `${url}#app`,
+	name: d.title,
+	description: d.description,
+	url,
+	applicationCategory: 'MultimediaApplication',
+	operatingSystem: 'Any (web browser)',
+	isAccessibleForFree: true,
+	offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+	author: { '@id': `${SITE.url}/#person` },
+	datePublished: d.published.toISOString().slice(0, 10),
+	image: `${SITE.url}/og/lab-${entry.id}.jpg`,
+};
+---
+
+<Base
+	title={d.seoTitle.length + 11 <= 62 ? `${d.seoTitle} | The Benn` : d.seoTitle}
+	description={d.description}
+	image={`/og/lab-${entry.id}.jpg`}
+	published={d.published}
+	crumbs={[
+		{ name: 'Home', url: '/' },
+		{ name: 'Lab', url: '/lab/' },
+		{ name: d.title, url: `/lab/${entry.id}/` },
+	]}
+	entity={entity}
+>
+	<article>
+		<header class="wrap lab-head">
+			<nav class="crumbs" aria-label="Breadcrumb"><a href="/lab/">Lab</a> <span aria-hidden="true">/</span> <span aria-current="page">{d.title}</span></nav>
+			<div class:list={['rack', 'head-rack', { solo: d.widget === 'scope' }]}>
+				<div class="cell head-main">
+					<h1 class="display lab-title">{d.title}</h1>
+					<p class="lede">{d.summary}</p>
+				</div>
+				{d.widget !== 'scope' && <ScopeBox ratio={d.scope} label={`X:Y ${d.scope.split(':').slice(0, 2).join(':')}`} class="head-scope" />}
+			</div>
+		</header>
+
+		<section class="wrap instrument" aria-label="Instrument">
+			{d.widget === 'scope' && <ScopeLab />}
+			{d.widget === 'pads' && <Pads />}
+			{d.widget === 'mixer' && <Mixer />}
+			{d.widget === 'viewfinder' && <Viewfinder />}
+			{d.widget === 'leds' && <Leds />}
+		</section>
+
+		<div class="wrap body">
+			<div class="prose">
+				<Content />
+			</div>
+			{
+				d.widget === 'leds' && poster && (
+					<aside class="media">
+						<figure class="clip">
+							<video autoplay muted loop playsinline preload="none" poster={poster.src} width="406" height="720">
+								<source src="/media/stm32-blink.webm" type="video/webm" />
+								<source src="/media/stm32-blink.mp4" type="video/mp4" />
+							</video>
+							<figcaption class="mini-label">The real board on my desk at FRI, blinking.</figcaption>
+						</figure>
+						<Photo src={armToggle} alt="A code editor on a lab PC showing ARM assembly with a comment that says Toggle LEDs forever." sizes="(max-width: 860px) 100vw, 30vw" ratio="9 / 14" />
+						<Photo src={armWhiteboard} alt="A whiteboard in a lecture room with an ARM subroutine written out: push, pop, BL and the link register." sizes="(max-width: 860px) 100vw, 30vw" ratio="16 / 10" />
+					</aside>
+				)
+			}
+		</div>
+
+		<nav class="wrap next" aria-label="Next experiment">
+			<a class="next-link" href={`/lab/${next.id}/`}>
+				<span class="mini-label">Next in the lab</span>
+				<span class="next-title display">{next.data.title}</span>
+			</a>
+		</nav>
+	</article>
+</Base>
+
+<style>
+	.lab-head {
+		padding-top: clamp(24px, 4vw, 48px);
+	}
+	.crumbs {
+		font-size: var(--t-sm);
+		color: var(--bone-2);
+		margin-bottom: 18px;
+	}
+	.crumbs a {
+		color: var(--bone-2);
+	}
+	.head-rack {
+		grid-template-columns: 1.7fr 1fr;
+	}
+	.head-rack.solo {
+		grid-template-columns: 1fr;
+	}
+	.head-main {
+		display: grid;
+		gap: 18px;
+		align-content: end;
+		padding-top: clamp(32px, 5vw, 72px);
+	}
+	.lab-title {
+		font-size: clamp(2.6rem, 1.2rem + 5vw, 5.8rem);
+		font-stretch: 100%;
+		max-width: 14ch;
+	}
+	:global(.head-scope) {
+		min-height: 220px;
+	}
+	.instrument {
+		margin-top: 1px;
+	}
+	.instrument :global(.rack) {
+		border-top: 0;
+	}
+	.body {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+		gap: clamp(24px, 5vw, 72px);
+		margin-top: clamp(48px, 7vw, 96px);
+	}
+	.media {
+		display: grid;
+		gap: 16px;
+		align-content: start;
+	}
+	.clip {
+		margin: 0;
+	}
+	.clip video {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 406 / 720;
+		max-height: 520px;
+		object-fit: cover;
+		background: var(--ink-2);
+	}
+	.clip figcaption {
+		margin-top: 8px;
+	}
+	.next {
+		margin-top: clamp(56px, 8vw, 110px);
+	}
+	.next-link {
+		display: grid;
+		gap: 10px;
+		padding: var(--pad);
+		border: 1px solid var(--rule);
+		text-decoration: none;
+	}
+	.next-link:hover {
+		border-color: var(--tape);
+	}
+	.next-title {
+		font-size: var(--t-4xl);
+	}
+	@media (max-width: 860px) {
+		.head-rack,
+		.body {
+			grid-template-columns: 1fr;
+		}
+		:global(.head-scope) {
+			min-height: 180px;
+		}
+	}
+</style>
