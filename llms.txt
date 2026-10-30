@@ -24,6 +24,7 @@ The Benn (Ben) is a freelance creative web developer based in Ljubljana, Sloveni
 - [Beat pads](https://thebenn.me/lab/beat-pads.md): Eight synth pads in A minor pentatonic, an 808-style kick, snare, hat and clap, and a 16-step sequencer. All synthesized with the Web Audio API.
 - [Vision mixer](https://thebenn.me/lab/vision-mixer.md): A two-bus vision mixer like the ones in a TV control room: preview and program, CUT, AUTO over 25 frames, a T-bar, mix and wipe, and red tally.
 - [Viewfinder](https://thebenn.me/lab/viewfinder.md): A broadcast camera viewfinder over a real stadium shot: rule of thirds, action and title safe areas, zebra stripes for exposure, focus box and timecode.
+- [Prompt injection field guide](https://thebenn.me/lab/prompt-injection.md): Why LLMs can't tell instructions from data, the main attack techniques, a 7-level interactive lab (direct and indirect injection), and the defenses that work.
 - [Blinking LEDs in ARM assembly](https://thebenn.me/lab/led-blink.md): Step through ARM assembly that lights the four LEDs on an STM32F4 Discovery board. Watch the registers and the GPIO output register change.
 
 ## Pages
